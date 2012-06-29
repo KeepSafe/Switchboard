@@ -21,7 +21,7 @@ import android.util.Log;
  * DynamicConficManager is the core class of the KeepSafe Switchboard mobile A/B testing framework.
  * This class provides a bunch of static methods that can be used in your app to run A/B tests. 
  * 
- * The DynamicConfigManager supports production and staging environment. 
+ * The SwitchBoard supports production and staging environment. 
  * 
  * For usage <code>initDefaultServerUrls</code> for first time usage. Server URLs can be updates from
  * a remote location with <code>initConfigServerUrl</code>.
@@ -34,9 +34,9 @@ import android.util.Log;
  * @author Philipp Berner
  *
  */
-public class DynamicConfigManager {
+public class SwitchBoard {
 	
-	private static final String TAG = "DynamicConfigManager";
+	private static final String TAG = "SwitchBoard";
 	
 	/** Set if the application is run in debug mode. DynamicConfig runs against staging server when in debug and production when not */
 	public static boolean DEBUG = false;
@@ -68,7 +68,7 @@ public class DynamicConfigManager {
 	
 	/**
 	 * Advanced initialization that supports a production and staging environment without changing the server URLs manually.
-	 * DynamicConfigManager will connect to the staging environment in debug mode. This makes it very simple to test new experiements
+	 * SwitchBoard will connect to the staging environment in debug mode. This makes it very simple to test new experiements
 	 * during development.
 	 * @param configServerUpdateUrlStaging Url to http://staging.domain/path_to/currentServerUrl.php in staging environment
 	 * @param configServerUrlStaging Url to: http://staging.domain/path_to/config.php in production - the acutall config
@@ -342,7 +342,7 @@ public class DynamicConfigManager {
 		}
 		@Override
 		protected Void doInBackground(Void... params) {
-			DynamicConfigManager.loadConfig(context);
+			SwitchBoard.loadConfig(context);
 			return null;
 		}
 		
