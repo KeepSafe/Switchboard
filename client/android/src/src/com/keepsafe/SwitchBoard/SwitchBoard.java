@@ -18,7 +18,7 @@ import android.os.Build;
 import android.util.Log;
 
 /**
- * DynamicConficManager is the core class of the KeepSafe Switchboard mobile A/B testing framework.
+ * SwitchBoard is the core class of the KeepSafe Switchboard mobile A/B testing framework.
  * This class provides a bunch of static methods that can be used in your app to run A/B tests. 
  * 
  * The SwitchBoard supports production and staging environment. 
@@ -103,7 +103,7 @@ public class SwitchBoard {
 	 */
 	
 	//TODO
-	public static void initConfigServerUrl(Context c) {
+	public static void updateConfigServerUrl(Context c) {
 		if(DEBUG) Log.d(TAG, "start initConfigServerUrl");
 		
 		if(DEBUG) { //TODO introduce staging environment beside DEBUG
@@ -178,7 +178,6 @@ public class SwitchBoard {
 				e.printStackTrace();
 			}
 			
-			
 			//load config, includes all experiments
 			String serverUrl = Preferences.getDynamicConfigServerUrl(c);
 			
@@ -197,7 +196,6 @@ public class SwitchBoard {
 		} catch (NullPointerException e) {
 			e.printStackTrace();
 		}
-		
 	}
 	
 	/**
@@ -320,17 +318,16 @@ public class SwitchBoard {
 			InputStreamReader inputStreamReader = new InputStreamReader(connection.getInputStream());
 			BufferedReader bufferReader = new BufferedReader(inputStreamReader, 8192);
 			String line = "";
-			String resultContent = "";
+			StringBuffer resultContent = new StringBuffer();
 			while ((line = bufferReader.readLine()) != null) {
 				if(DEBUG) Log.d(TAG, line);
-				resultContent += line;
-				
+				resultContent.append(line);
 			}
 			bufferReader.close();
 			
 			if(DEBUG) Log.d(TAG, "readFromUrl() result: " + resultContent);
 			
-			return resultContent;
+			return resultContent.toString();
 		} catch (ProtocolException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
