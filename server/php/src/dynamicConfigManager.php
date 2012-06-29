@@ -14,6 +14,7 @@ $device;
 $uuid;
 $country;
 $version;
+$appId;
 
 
 setGetParams($_GET);
@@ -35,20 +36,28 @@ function getUserBucket($uuid) {
 	return $segment;
 }
 
+function isApplicationId($applicationId) {
+	if($applicationId == $appId)
+		return true;
+	else
+		return false;
+}
+
 function renderResultJson($resultArray) {
 	header('Content-type: application/json');
 	echo json_encode($resultArray);
 }
 
 function setGetParams($appParams) {
-	global $lang, $manufacturer, $device, $uuid, $country, $version;
+	global $lang, $manufacturer, $device, $uuid, $country, $version, $appId;
 	
-	$uuid = getUserBucket($appParams, 'uuid');
-	$device = getUserBucket($appParams, 'device');
-	$manufacturer = getUserBucket($appParams, 'manufacturer');
-	$lang = getUserBucket($appParams, 'lang');
-	$version = getUserBucket($appParams, 'version');
-	$country = getUserBucket($appParams, 'country');
+	$uuid = getArrayParam($appParams, 'uuid');
+	$device = getArrayParam($appParams, 'device');
+	$manufacturer = getArrayParam($appParams, 'manufacturer');
+	$lang = getArrayParam($appParams, 'lang');
+	$version = getArrayParam($appParams, 'version');
+	$country = getArrayParam($appParams, 'country');
+	$appId = getArrayParam($appParams, 'appId');
 }
 
 function getArrayParam($array, $paramName){
