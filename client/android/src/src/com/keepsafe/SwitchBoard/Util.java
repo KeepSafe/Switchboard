@@ -22,6 +22,15 @@ public class Util {
 	public static final String MODEL = "model";
 	public static final String UUID = "uuid";
 
+	/**
+	 * Gets a HashTable with the following system params:
+	 * - model
+	 * - app_version
+	 * - firmware
+	 * - uuid
+	 * @param context
+	 * @return
+	 */
 	public static Hashtable<String, String> getSystemParams(Context context) {
 		Hashtable<String, String> table = new Hashtable<String, String>();
 		

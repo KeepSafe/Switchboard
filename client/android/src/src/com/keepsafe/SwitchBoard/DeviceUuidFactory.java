@@ -15,9 +15,7 @@ import android.telephony.TelephonyManager;
  * Tries to get the device ID as a UUID and fallsback to a generated UUID value
  * if it doesn't work.
  * 
- * @see http 
- *      ://stackoverflow.com/questions/2785485/is-there-a-unique-android-device
- *      -id
+ * @see http ://stackoverflow.com/questions/2785485/is-there-a-unique-android-device-id
  * 
  */
 public class DeviceUuidFactory {

@@ -4,9 +4,13 @@
 package com.keepsafe.SwitchBoard;
 
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.util.Log;
 
 
 
@@ -15,7 +19,7 @@ import android.content.SharedPreferences.Editor;
  *
  */
 public class Preferences {
-	
+	private static final String TAG = "Preferences";
 	
 	private static final String switchBoardSettings = "com.keepsafe.switchboard.settings";
 	
@@ -27,7 +31,7 @@ public class Preferences {
 	
 
 	//dynamic config
-	/**
+	/** TODO check this!!!
 	 * Returns a JSON string array with <br />
 	 * position 0 = updateserverUrl <br />
 	 * Fields a null if not existent.
@@ -67,7 +71,7 @@ public class Preferences {
 	}
 	
 	/**
-	 * 
+	 * Gets the user config as a JSON string.
 	 * @param c
 	 * @return
 	 */
@@ -76,6 +80,12 @@ public class Preferences {
 		return settings.getString(kDynamicConfig, null);
 	}
 
+	/**
+	 * Saves the user config as a JSON sting.
+	 * @param c
+	 * @param configJson
+	 * @return
+	 */
 	public static boolean setDynamicConfigJson(Context c, String configJson) {
 		SharedPreferences.Editor settings = (Editor) Preferences.getPreferenceObject(c, true);
 		settings.putString(kDynamicConfig, configJson);
