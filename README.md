@@ -66,7 +66,7 @@ Example code of the PHP implementation for a simple on/off switch:
 
 	//return result array as JSON
 	renderResultJson($resultArray);
-```php
+```
 
 You can do more complex things if you want:
 
@@ -95,7 +95,7 @@ You can do more complex things if you want:
 		//default
 		return inactiveExperimentReturnArray();
 	}
-```php
+```
 
 ## License
 Switchboard is distributed under the xxx license
