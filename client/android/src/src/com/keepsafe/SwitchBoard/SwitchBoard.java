@@ -13,7 +13,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
-import android.os.AsyncTask;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Build;
 import android.util.Log;
 
@@ -160,21 +160,32 @@ public class SwitchBoard {
 	public static void loadConfig(Context c, String uuid) {
 		
 		try {
+			
 			//get uuid
 			Hashtable<String, String> specs = Util.getSystemParams(c);
-			
-			//take SwitchBoard Util UUID if user has not specified by himself.
 			if(uuid == null)
 				uuid = specs.get(Util.UUID);
 			
 			String device = Build.DEVICE;
+			String manufacturer = Build.MANUFACTURER;
 			String lang = Locale.getDefault().getISO3Language();
+			String country = Locale.getDefault().getISO3Country();			
+			String packageName = c.getPackageName();
+			String versionName = "none";
+			try {
+				versionName = c.getPackageManager().getPackageInfo(c.getPackageName(), 0).versionName;
+			} catch (NameNotFoundException e) {
+				e.printStackTrace();
+			}
+			
 			
 			//load config, includes all experiments
 			String serverUrl = Preferences.getDynamicConfigServerUrl(c);
 			
 			if(serverUrl != null) {
-				String serverConfig = readFromUrlGET(serverUrl, "uuid="+uuid+"&device="+device+"&lang="+lang);
+				String serverConfig = readFromUrlGET(serverUrl, 
+						"uuid="+uuid+"&device="+device+"&lang="+lang+"&country="+country
+						+"&manufacturer="+manufacturer+"&appId="+packageName+"&version="+versionName);
 				
 				if(DEBUG) Log.d(TAG, serverConfig);
 				
@@ -328,24 +339,4 @@ public class SwitchBoard {
 
 		return null;
 	}
-	
-	/**
-	 * An async loader to load user config in background thread based on internal generated UUID.
-	 * @author philipp
-	 *
-	 */
-	public class AsyncConfigLoader extends AsyncTask<Void, Void, Void> {
-
-		Context context;
-		public AsyncConfigLoader(Context c) {
-			this.context = c;
-		}
-		@Override
-		protected Void doInBackground(Void... params) {
-			SwitchBoard.loadConfig(context);
-			return null;
-		}
-		
-	}
-
 }
