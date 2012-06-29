@@ -23,7 +23,7 @@ You can customize the DynamicConfigManager to send all sorts of information to t
 
 Here's some on/off switch example code on Android:
 
-  Context myContext = this.getApplicationContext();
+  	Context myContext = this.getApplicationContext();
 	String experimentName = "showSmiley";
 	
 	//get settings from Switchboard
