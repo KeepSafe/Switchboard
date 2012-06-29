@@ -13,14 +13,14 @@ include('../src/dynamicConfigManager.php');
 $resultArray = array();
 
 //pin message
-$resultArray['sample'] = sampleExpiriment($uuid, $lang, $version);
-$resultArray['stageRollOut'] = exampleStageRolleOut($uuid);
+$resultArray['sample'] = sampleExperiment($uuid, $lang, $version);
+$resultArray['stageRollOut'] = turnOnBucket($uuid, 0, 20);
 
 //return result array as JSON
 renderResultJson($resultArray);
 
 
-function sampleExpiriment($uuid, $lang, $version) {
+function sampleExperiment($uuid, $lang, $version) {
 	if(empty($uuid))
 		return inactiveExperimentReturnArray();
 	
@@ -49,11 +49,8 @@ function sampleExpiriment($uuid, $lang, $version) {
 		}
 	}
 	
+	//user is not in experiment as default
+	return inactiveExperimentReturnArray();
 }
 
-
-//------------ stage roleout --------------
-function exampleStageRolleOut($uuid) {
-	return turnOnBucket($uuid, 0, 20);
-}
 ?>
