@@ -23,6 +23,7 @@ public class AsyncConfigLoader extends AsyncTask<String, Void, Void> {
 	
 	@Override
 	protected Void doInBackground(String... params) {
+		//use custom UUID when set
 		if(params.length == 1) {
 			String uuid = params[0];
 			SwitchBoard.loadConfig(context, uuid);
