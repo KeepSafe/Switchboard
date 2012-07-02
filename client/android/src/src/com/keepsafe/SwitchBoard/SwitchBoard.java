@@ -2,6 +2,7 @@ package com.keepsafe.SwitchBoard;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.ProtocolException;
@@ -63,7 +64,10 @@ public class SwitchBoard {
 	 */
 	public static void initDefaultServerUrls(String configServerUpdateUrl, String configServerUrl,
 			boolean isDebug) {
-		initDefaultServerUrls(configServerUpdateUrl, configServerUrl, configServerUpdateUrl, configServerUrl, isDebug);
+		
+		DYNAMIC_CONFIG_SERVER_URL_UPDATE = configServerUpdateUrl;
+		DYNAMIC_CONFIG_SERVER_DEFAULT_URL = configServerUrl;
+		DEBUG = isDebug;
 	}
 	
 	/**
@@ -101,12 +105,11 @@ public class SwitchBoard {
 	 * 
 	 * @param c Application context
 	 */
-	
-	//TODO
 	public static void updateConfigServerUrl(Context c) {
 		if(DEBUG) Log.d(TAG, "start initConfigServerUrl");
 		
-		if(DEBUG) { //TODO introduce staging environment beside DEBUG
+		if(DEBUG) {
+			//set default value that is set in code for debug mode.
 			Preferences.setDynamicConfigServerUrl(c, DYNAMIC_CONFIG_SERVER_URL_UPDATE, DYNAMIC_CONFIG_SERVER_DEFAULT_URL);
 			return;
 		}
@@ -130,7 +133,7 @@ public class SwitchBoard {
 				if(DEBUG) Log.d(TAG, "Update Server Url: " + (String)a.get(kUpdateServerUrl));
 				if(DEBUG) Log.d(TAG, "Config Server Url: " + (String)a.get(kConfigServerUrl));
 			} else {
-				storeDefauledUrlsInPreferences(c);
+				storeDefaultUrlsInPreferences(c);
 			}
 			
 		} catch (JSONException e) {
@@ -199,12 +202,24 @@ public class SwitchBoard {
 	}
 	
 	/**
+	 * Looks up in config if user is in certain experiment. Returns false as a default value when experiment
+	 * does not exist.
+	 * Experiment names are defined server side as Key in array for return values.
+	 * @param experimentName Name of the experiment to lookup
+	 * @return returns value for experiment or false if experiment does not exist.
+	 */
+	public static boolean isInExperiment(Context c, String experimentName) {
+		return isInExperiment(c, experimentName, false);
+	}
+	
+	/**
 	 * Looks up in config if user is in certain experiment.
 	 * Experiment names are defined server side as Key in array for return values.
 	 * @param experimentName Name of the experiment to lookup
-	 * @return returns value for experiment and false if experiment does not exist.
+	 * @param defaultReturnVal The return value that should be return when experiment does not exist
+	 * @return returns value for experiment or defaultReturnVal if experiment does not exist.
 	 */
-	public static boolean isInExperiment(Context c, String experimentName) {
+	public static boolean isInExperiment(Context c, String experimentName, boolean defaultReturnVal) {
 		//lookup experiment in config
 		String config = Preferences.getDynamicConfigJson(c);
 		
@@ -217,9 +232,9 @@ public class SwitchBoard {
 				JSONObject experiment = (JSONObject) new JSONObject(config).get(experimentName);
 				if(DEBUG) Log.d(TAG, "experiment " + experimentName + " JSON object: " + experiment.toString());
 				if(experiment == null)
-					return false;
+					return defaultReturnVal;
 				
-				boolean returnValue = false;
+				boolean returnValue = defaultReturnVal;
 				returnValue = experiment.getBoolean(IS_EXPERIMENT_ACTIVE);
 				
 				return returnValue;
@@ -230,7 +245,7 @@ public class SwitchBoard {
 			}
 		
 			//return false when JSON fails
-			return false;
+			return defaultReturnVal;
 		}
 		
 	}
@@ -281,7 +296,7 @@ public class SwitchBoard {
 	 * URLs when already set in shared preferences.
 	 * @param c
 	 */
-	private static void storeDefauledUrlsInPreferences(Context c) {
+	private static void storeDefaultUrlsInPreferences(Context c) {
 		String configUrl = Preferences.getDynamicConfigServerUrl(c);
 		String updateUrl = Preferences.getDynamicUpdateServerUrl(c);
 			
@@ -315,7 +330,8 @@ public class SwitchBoard {
 			connection.setDoOutput(true);
 
 			// get response
-			InputStreamReader inputStreamReader = new InputStreamReader(connection.getInputStream());
+			InputStream is = connection.getInputStream();
+			InputStreamReader inputStreamReader = new InputStreamReader(is);
 			BufferedReader bufferReader = new BufferedReader(inputStreamReader, 8192);
 			String line = "";
 			StringBuffer resultContent = new StringBuffer();
@@ -325,7 +341,7 @@ public class SwitchBoard {
 			}
 			bufferReader.close();
 			
-			if(DEBUG) Log.d(TAG, "readFromUrl() result: " + resultContent);
+			if(DEBUG) Log.d(TAG, "readFromUrl() result: " + resultContent.toString());
 			
 			return resultContent.toString();
 		} catch (ProtocolException e) {
