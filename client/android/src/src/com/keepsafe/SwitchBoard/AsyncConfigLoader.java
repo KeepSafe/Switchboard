@@ -29,7 +29,6 @@ public class AsyncConfigLoader extends AsyncTask<String, Void, Void> {
 			SwitchBoard.loadConfig(context, uuid);
 		} else
 			SwitchBoard.loadConfig(context);
-			
 		
 		return null;
 	}

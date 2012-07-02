@@ -1,6 +1,3 @@
-/**
- * 
- */
 package com.keepsafe.SwitchBoard;
 
 
@@ -11,7 +8,8 @@ import android.content.SharedPreferences.Editor;
 
 
 /**
- * @author philipp
+ * Application preferences for SwitchBoard.
+ * @author Philipp Berner
  *
  */
 public class Preferences {
