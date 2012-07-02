@@ -1,4 +1,13 @@
 <?php
+/*
+ * SwitchBoardConfigManager provides the core functionality for the SwitchBoard A/B testing framework.
+ * This file offers a bunch of helper methodes that you can use to generate a valid config file for your client.
+ * It also contains the core function to split users into different consitent buckets.
+ *
+ * @author Philipp Berner
+ * Licence: TODO
+ */
+
 
 /* Possible params
  * $lang - Device language

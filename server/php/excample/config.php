@@ -1,5 +1,5 @@
 <?php
-include('../src/dynamicConfigManager.php');
+include('switchboard/switchBoardConfigManager.php');
 /* Possible params
  * $lang - Device language
  * $manufacturer - Device manufacturer
@@ -13,13 +13,16 @@ include('../src/dynamicConfigManager.php');
 $resultArray = array();
 
 //pin message
-$resultArray['sample'] = sampleExperiment($uuid, $lang, $version);
-$resultArray['stageRollOut'] = turnOnBucket($uuid, 0, 20);
+$resultArray['pinMessage'] = sampleExperiment($uuid, $lang, $version);
+
 
 //return result array as JSON
 renderResultJson($resultArray);
 
 
+/** Sample experiment that gives 20% of the users a message. Those 20% are devided into two groups that
+  * get to see a different message
+  */
 function sampleExperiment($uuid, $lang, $version) {
 	if(empty($uuid))
 		return inactiveExperimentReturnArray();
@@ -31,7 +34,7 @@ function sampleExperiment($uuid, $lang, $version) {
 		
 		//Filter for only users with english language settings
 		if($lang == "eng") {
-			
+			//first 10% of the user see this message
 			if(isInBucket($uuid, 0, 10)){
 				//message that you want to display in the app
 				$values['message'] = 'IMPORTANT! Get KeepSafe: <a href="market://details?id=com.kii.safe">click HERE.</a>'; 
@@ -40,6 +43,7 @@ function sampleExperiment($uuid, $lang, $version) {
 				$values['messageTitle'] = 'get KeepSafe ver 1';
 
 				return activeExperimentReturnArray($values);
+			//the other 10% of the user see another message
 			} else {
 				$values['message'] = 'Please download KeepSafe: <a href="market://details?id=com.kii.safe">click HERE.</a>'; 
 				$values['messageTitle'] = 'get KeepSafe ver 2';
