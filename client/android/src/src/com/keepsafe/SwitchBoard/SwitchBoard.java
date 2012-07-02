@@ -165,9 +165,10 @@ public class SwitchBoard {
 		try {
 			
 			//get uuid
-			Hashtable<String, String> specs = Util.getSystemParams(c);
-			if(uuid == null)
-				uuid = specs.get(Util.UUID);
+			if(uuid == null) {
+				DeviceUuidFactory df = new DeviceUuidFactory(c);
+				uuid = df.getDeviceUuid().toString();
+			}
 			
 			String device = Build.DEVICE;
 			String manufacturer = Build.MANUFACTURER;

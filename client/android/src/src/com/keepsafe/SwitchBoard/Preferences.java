@@ -4,13 +4,9 @@
 package com.keepsafe.SwitchBoard;
 
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.util.Log;
 
 
 
