@@ -1,4 +1,4 @@
-package com.keepsafe.SwitchBoard;
+package com.keepsafe.switchboard;
 
 import android.content.Context;
 import android.os.AsyncTask;

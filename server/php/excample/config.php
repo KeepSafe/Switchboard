@@ -13,7 +13,8 @@ include('switchboard/switchBoardConfigManager.php');
 $resultArray = array();
 
 //pin message
-$resultArray['pinMessage'] = sampleExperiment($uuid, $lang, $version);
+$resultArray['homeScreenMessage'] = sampleExperiment($uuid, $lang, $version);
+$resultArray['nextActivityTest'] = turnOnBucket($uuid, 0, 50);
 
 
 //return result array as JSON

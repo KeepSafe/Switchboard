@@ -1,4 +1,4 @@
-package com.keepsafe.SwitchBoard;
+package com.keepsafe.switchboard;
 
 import java.io.BufferedReader;
 import java.io.IOException;
