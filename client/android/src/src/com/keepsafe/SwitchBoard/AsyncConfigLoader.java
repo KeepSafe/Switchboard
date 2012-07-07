@@ -1,7 +1,9 @@
 package com.keepsafe.switchboard;
 
+
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 
 /**
  * An async loader to load user config in background thread based on internal generated UUID.
@@ -10,26 +12,57 @@ import android.os.AsyncTask;
  * To use your custom UUID call <code>AsyncConfigLoader.execute(uuid)</code> with uuid being your unique user id
  * as a String 
  *
- * @author philipp
+ * @author Philipp Berner
  *
  */
-public class AsyncConfigLoader extends AsyncTask<String, Void, Void> {
+public class AsyncConfigLoader extends AsyncTask<Void, Void, Void> {
 
-	Context context;
-	public AsyncConfigLoader(Context c) {
-		this.context = c;
+	private String TAG = "AsyncConfigLoader";
+	
+	public static final int UPDATE_SERVER = 1;
+	public static final int CONFIG_SERVER = 2;
+	
+	private Context context;
+	private int configToLoad;
+	private String uuid;
+	
+	/**
+	 * Sets the params for async loading either SwitchBoard.updateConfigServerUrl()
+	 * or SwitchBoard.loadConfig.
+	 * @param c Application context
+	 * @param configType Either UPDATE_SERVER or CONFIG_SERVER
+	 */
+	public AsyncConfigLoader(Context c, int configType) {
+		this(c, configType, null);
 	}
 	
+	/**
+	 * Sets the params for async loading either SwitchBoard.updateConfigServerUrl()
+	 * or SwitchBoard.loadConfig.
+	 * Loads config with a custom UUID
+	 * @param c Application context
+	 * @param configType Either UPDATE_SERVER or CONFIG_SERVER
+	 * @param uuid Custom UUID
+	 */
+	public AsyncConfigLoader(Context c, int configType, String uuid) {
+		this.context = c;
+		this.configToLoad = configType;
+		this.uuid = uuid;
+	}
 	
 	@Override
-	protected Void doInBackground(String... params) {
-		//use custom UUID when set
-		if(params.length == 1) {
-			String uuid = params[0];
-			SwitchBoard.loadConfig(context, uuid);
-		} else
-			SwitchBoard.loadConfig(context);
+	protected Void doInBackground(Void... params) {
 		
+		if(configToLoad == UPDATE_SERVER) {
+			SwitchBoard.updateConfigServerUrl(context);
+		}
+		else {
+			if(uuid == null)
+				SwitchBoard.loadConfig(context);
+			else
+				SwitchBoard.loadConfig(context, uuid);
+		}
+			
 		return null;
 	}
 	

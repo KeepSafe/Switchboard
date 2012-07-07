@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.TextView;
 
+import com.keepsafe.switchboard.AsyncConfigLoader;
 import com.keepsafe.switchboard.SwitchBoard;
 
 public class SwitchBoardExampleAppActivity extends Activity {
@@ -21,12 +22,20 @@ public class SwitchBoardExampleAppActivity extends Activity {
         //Initializes the default URLs the first time. 
         SwitchBoard.initDefaultServerUrls("http://your-domain/path_to/currentServerUrl.php", "http://your-domain/path_to/config.php", true);
         
-        //Looks at the server if there are changes in the server URL that should be used in the future
+        /* Looks at the server if there are changes in the server URL that should be used in the future
+         * 
+         * In production you should be loaded asynchronous with AsyncConfigLoader.
+         * new AsyncConfigLoader(this, AsyncConfigLoader.UPDATE_SERVER);
+         */
         SwitchBoard.updateConfigServerUrl(this);
-        //TODO Async
         
-        //Loads the actual config. This can be done on app start or on app onResume(). 
-        //depending how often you want to update the config.
+        
+        /* Loads the actual config. This can be done on app start or on app onResume().
+         * depending how often you want to update the config.
+         *  
+         * In production you should be loaded asynchronous with AsyncConfigLoader.
+         * new AsyncConfigLoader(this, AsyncConfigLoader.CONFIG_SERVER);
+         */ 
         SwitchBoard.loadConfig(this);
         
         setContentView(R.layout.main);
