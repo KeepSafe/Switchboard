@@ -6,7 +6,7 @@ Switchboard is a simple way to remote control your mobile application even after
 devices.
 Use switchboard to
 * Stage-rollout new features to users
-* A/B-test things in your app
+* A/B-test user flows, messaging, colors, features
 * anything you want to remote-control
 
 Switchboard lets you control what happens in your app. Quick, easy, useful.
@@ -16,9 +16,30 @@ Switchboard lets you control what happens in your app. Quick, easy, useful.
 ## What it does not do (what you have to do yourself)
 Switchboard does not give you analytics, nor does it automatic administration and optimization of your A/B tests. It also doesn't give you nice graphs and stuff. You can get all of that by plugging an analytics package into your app which you're probably doing anyway.
 
+## Features
+* Consistent user segmentation based on device ID
+* Define experiments for specific application versions, OS version, language settings and more
+* Comes with build in configuration for production and staging environment
+* Highly scalable
+* Safe when device is offline
+* Flexible custom parameters for experiments
+
+## What Switchboard was designed for
+Switchboard was design as a super light weight and very flexible mobile A/B testing framework. 
+### Infrastructure
+The goal was to serve millions of requests very reliable without much infrastructure. It should easy scale horizontally to avoid overhead in
+maintaining it while your application scales. It is designed without a database or any other type of persistent storage that would slow
+it down.
+### User segmentation
+Consistency in user segmentation is one of the most important things in A/B testing. This means that one individual user will always have a consistent experience
+ over time. Switchboard does consistent user segmentation based on a unique device id.
+
 ## How to use it
 ### Client
-Add the DynamicConfigManager package to your project. You only need to initialize the DynamicConficManager at the application start. 
+Switchboard is currently only available for Android. iOS support will be available very soon.
+
+#### Android
+Link the Switchboard project to your andorid project as a library project. You only need to initialize the Switchboard core at the application start once. 
 Then, you can add switches to your app and have the Switchboard give you the current state.
 
 You can customize the DynamicConfigManager to send all sorts of information to the Switchboard server for control decisions, e.g. location, OS version, device, language.
@@ -43,20 +64,23 @@ And it works for varying any value too. Again, on Android:
 
 ```java
 	if (isSmiling) {
-		//get remote controlled values from Switchboard
-		JSONObject smileValues = Switchboard.getExperimentValueFromJson(myContext, experimentName);
+		if(Switchboard.hasExperimentValues(myContext, experimentName)) {
+			
+			//get remote controlled values from Switchboard
+			JSONObject smileValues = Switchboard.getExperimentValueFromJson(myContext, experimentName);
 
-		int smileWidth = smileValues.getInt("width");
+			int smileWidth = smileValues.getInt("width");
 
-		//do something with it
-		prepareSmiley(smileWidth);
-		showSmileyWelcomeMessage();
+			//do something with it
+			prepareSmiley(smileWidth);
+			showSmileyWelcomeMessage();
+		}
 	}
 ```
 
 ### Server
-The server receives a UUID that the client generated (mandatory) as well as any other parameters that you decided to send.
-Here, you configure what the switches on the particular device flip.
+The server receives a UUID that the client generated as well as many other parameters like app version, OS version, device language, location.
+Users are divided into 100 consistent user buckets. Switchboard makes it incredible easy to write new tests based on the given parameters.
 
 Example code of the PHP implementation for a simple on/off switch:
 
