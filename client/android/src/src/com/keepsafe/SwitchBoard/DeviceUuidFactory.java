@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.preference.Preference;
 
 /**
  * Generates a UUID and stores is persistent as in the apps shared preferences.
@@ -14,7 +15,7 @@ public class DeviceUuidFactory {
 	protected static final String PREFS_FILE = "com.keepsafe.switchboard.uuid";
 	protected static final String PREFS_DEVICE_ID = "device_id";
 
-	protected static UUID uuid;
+	private static UUID uuid = null;
 
 	public DeviceUuidFactory(Context context) {
 
@@ -22,7 +23,7 @@ public class DeviceUuidFactory {
 			synchronized (DeviceUuidFactory.class) {
 				if (uuid == null) {
 					final SharedPreferences prefs = context
-							.getSharedPreferences(PREFS_FILE, 0);
+							.getSharedPreferences(PREFS_FILE, Context.MODE_PRIVATE);
 					final String id = prefs.getString(PREFS_DEVICE_ID, null);
 
 					if (id != null) {
@@ -33,6 +34,7 @@ public class DeviceUuidFactory {
 					} else {
 
 						UUID newId = UUID.randomUUID();
+						uuid = newId;
 						
 						// Write the value out to the prefs file
 						prefs.edit()

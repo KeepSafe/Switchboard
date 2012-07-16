@@ -8,6 +8,7 @@ import java.net.HttpURLConnection;
 import java.net.ProtocolException;
 import java.net.URL;
 import java.util.Locale;
+import java.util.UUID;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -39,7 +40,7 @@ public class SwitchBoard {
 	private static final String TAG = "SwitchBoard";
 	
 	/** Set if the application is run in debug mode. DynamicConfig runs against staging server when in debug and production when not */
-	public static boolean DEBUG = false;
+	public static boolean DEBUG = true;
 	
 	/** Production server to update the remote server URLs. http://staging.domain/path_to/currentServerUrl.php */
 	private static String DYNAMIC_CONFIG_SERVER_URL_UPDATE;
@@ -185,9 +186,10 @@ public class SwitchBoard {
 			String serverUrl = Preferences.getDynamicConfigServerUrl(c);
 			
 			if(serverUrl != null) {
-				String serverConfig = readFromUrlGET(serverUrl, 
-						"uuid="+uuid+"&device="+device+"&lang="+lang+"&country="+country
-						+"&manufacturer="+manufacturer+"&appId="+packageName+"&version="+versionName);
+				String params = "uuid="+uuid+"&device="+device+"&lang="+lang+"&country="+country
+						+"&manufacturer="+manufacturer+"&appId="+packageName+"&version="+versionName;
+				if(DEBUG) Log.d(TAG, "Read from server URL: " + serverUrl + params);
+				String serverConfig = readFromUrlGET(serverUrl, params);
 				
 				if(DEBUG) Log.d(TAG, serverConfig);
 				
