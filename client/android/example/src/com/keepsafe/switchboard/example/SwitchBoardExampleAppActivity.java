@@ -25,7 +25,7 @@ public class SwitchBoardExampleAppActivity extends Activity {
         
         //Initializes the default URLs the first time. 
         Log.d(TAG, "init Server Urls");
-        SwitchBoard.initDefaultServerUrls("http://switchboard.herokuapp.com/currentServerUrl.php", "http://switchboard.herokuapp.com/config.php", true);
+        SwitchBoard.initDefaultServerUrls("http://switchboard.herokuapp.com/SwitchboardURLs.php", "http://switchboard.herokuapp.com/SwitchboardDriver.php", true);
         
         /* Looks at the server if there are changes in the server URL that should be used in the future
          * 

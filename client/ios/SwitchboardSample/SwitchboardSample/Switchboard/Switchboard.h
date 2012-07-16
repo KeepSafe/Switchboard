@@ -52,8 +52,8 @@
 
 /**
  * Basic initialization with one server. 
- * @param serverURL Url to: http://sub.domain/path_to/currentServerUrl.php 
- * @param mainURL Url to: http://sub.domain/path_to/config.php - the acutall config
+ * @param serverURL Url to: http://sub.domain/path_to/SwitchboardURLs.php 
+ * @param mainURL Url to: http://sub.domain/path_to/SwitchboardDriver.php - the acutall config
  * @param debug Is the application running in debug mode. This will add log messages.
  */
 + (void) beginWithServerURL:(NSString*)serverURL 
@@ -64,10 +64,10 @@
  * Advanced initialization that supports a production and staging environment without changing the server URLs manually.
  * SwitchBoard will connect to the staging environment in debug mode. This makes it very simple to test new experiements
  * during development.
- * @param serverURL Url to http://sub.domain/path_to/currentServerUrl.php in production environment
- * @param serverURLStage Url to http://sub.domain/path_to/currentServerUrl.php in staging environment
- * @param mainURL Url to: http://sub.domain/path_to/config.php in production - the acutal config
- * @param mainURLStage Url to: http://sub.domain/path_to/config.php in production - the acutal config
+ * @param serverURL Url to http://sub.domain/path_to/SwitchboardURLs.php in production environment
+ * @param serverURLStage Url to http://sub.domain/path_to/SwitchboardURLs.php in staging environment
+ * @param mainURL Url to: http://sub.domain/path_to/SwitchboardDriver.php in production - the acutal config
+ * @param mainURLStage Url to: http://sub.domain/path_to/SwitchboardDriver.php in production - the acutal config
  * @param debug Defines if the app runs in debug.
  */
 + (void) beginWithServerURL:(NSString*)serverURL 

@@ -42,10 +42,10 @@ public class SwitchBoard {
 	/** Set if the application is run in debug mode. DynamicConfig runs against staging server when in debug and production when not */
 	public static boolean DEBUG = true;
 	
-	/** Production server to update the remote server URLs. http://staging.domain/path_to/currentServerUrl.php */
+	/** Production server to update the remote server URLs. http://staging.domain/path_to/SwitchboardURLs.php */
 	private static String DYNAMIC_CONFIG_SERVER_URL_UPDATE;
 	
-	/** Production server for getting the actual config file. http://staging.domain/path_to/config.php */
+	/** Production server for getting the actual config file. http://staging.domain/path_to/SwitchboardDriver.php */
 	private static String DYNAMIC_CONFIG_SERVER_DEFAULT_URL;
 	
 	
@@ -58,8 +58,8 @@ public class SwitchBoard {
 	
 	/**
 	 * Basic initialization with one server. 
-	 * @param configServerUpdateUrl Url to: http://staging.domain/path_to/currentServerUrl.php 
-	 * @param configServerUrl Url to: http://staging.domain/path_to/config.php - the acutall config
+	 * @param configServerUpdateUrl Url to: http://staging.domain/path_to/SwitchboardURLs.php 
+	 * @param configServerUrl Url to: http://staging.domain/path_to/SwitchboardDriver.php - the acutall config
 	 * @param isDebug Is the application running in debug mode. This will add log messages.
 	 */
 	public static void initDefaultServerUrls(String configServerUpdateUrl, String configServerUrl,
@@ -74,10 +74,10 @@ public class SwitchBoard {
 	 * Advanced initialization that supports a production and staging environment without changing the server URLs manually.
 	 * SwitchBoard will connect to the staging environment in debug mode. This makes it very simple to test new experiements
 	 * during development.
-	 * @param configServerUpdateUrlStaging Url to http://staging.domain/path_to/currentServerUrl.php in staging environment
-	 * @param configServerUrlStaging Url to: http://staging.domain/path_to/config.php in production - the acutall config
-	 * @param configServerUpdateUrl Url to http://staging.domain/path_to/currentServerUrl.php in production environment
-	 * @param configServerUrl Url to: http://staging.domain/path_to/config.php in production - the acutall config
+	 * @param configServerUpdateUrlStaging Url to http://staging.domain/path_to/SwitchboardURLs.php in staging environment
+	 * @param configServerUrlStaging Url to: http://staging.domain/path_to/SwitchboardDriver.php in production - the acutall config
+	 * @param configServerUpdateUrl Url to http://staging.domain/path_to/SwitchboardURLs.php in production environment
+	 * @param configServerUrl Url to: http://staging.domain/path_to/SwitchboardDriver.php in production - the acutall config
 	 * @param isDebug Defines if the app runs in debug.
 	 */
 	public static void initDefaultServerUrls(String configServerUpdateUrlStaging, String configServerUrlStaging, 
