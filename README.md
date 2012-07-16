@@ -85,43 +85,48 @@ Users are divided into 100 consistent user buckets. Switchboard makes it incredi
 Example code of the PHP implementation for a simple on/off switch:
 
 ```php
+	$manager = new SwitchboardManager($_GET);
+	
 	//put 50% of your users into the showSmiley A/B test
-	$resultArray['showSmiley'] = turnOnBucket($uuid, 0, 50);
+	$resultArray['showSmiley'] = $manager->turnOnBucket(0, 50);
 
 	//return result array as JSON
-	renderResultJson($resultArray);
+	$manager->renderResultJson($resultArray);
 ```
 
 You can do more complex things if you want:
 
 ```php
+	$manager = new SwitchboardManager($_GET);
+	$experiments = new SwitchboardExperiments($manager);
+	
 	//put a percentage of users in the test and vary smile width
-	$resultArray['showSmiley'] = smileyVariation($uuid, $lang);
+	$resultArray['showSmiley'] = $experiments->smileyVariation($uuid, $lang);
 	
 	//return result array as JSON
-    renderResultJson($resultArray);
+    $manager->renderResultJson($resultArray);
+	
+	class SwitchboardExperiments {
+		function smileyVariation($uuid, $lang){
 
-	function smileyVariation($uuid, $lang){
-		if (empty($uuid))
-			return inactiveExperimentReturnArray();
+			//turn it on for 50% only
+			if ($this->$manager->isInBucket($uuid, 0, 50)){
 
-		//turn it on for 50% only
-		if (isInBucket($uuid, 0, 50)){
-
-			$values = array();
-			//and then vary the values
-			if ($lang == "eng"){ //broad smiles in US
-				$values['width'] = 10;
-			} else if ($lang == "deu"){ //more subtle in Germany
-				$values['width'] = 9;
-			} else {
-				return inactiveExperimentReturnArray();
+				$values = array();
+				//and then vary the values
+				if ($this->$manager->$lang == "eng"){ //broad smiles in US
+					$values['width'] = 10;
+				} else if ($this->$manager->$lang == "deu"){ //more subtle in Germany
+					$values['width'] = 9;
+				} else {
+					return $this->$manager->inactiveExperimentReturnArray();
+				}
+				return $this->$manager->activeExperimentReturnArray($values);
 			}
-			return activeExperimentReturnArray($values);
-		}
 
-		//default
-		return inactiveExperimentReturnArray();
+			//default
+			return $this->$manager->inactiveExperimentReturnArray();
+		}
 	}
 ```
 
