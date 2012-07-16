@@ -20,10 +20,8 @@
 @synthesize messageText;
 
 - (void) refreshMessage {
-    
-    SBExperiment *e = [Switchboard getExperiment:@"homeScreenMessage"];
-    
-    if([e isInExperiment]) {
+        
+    if([Switchboard isInExperiment:@"homeScreenMessage"]) {
         
         NSLog(@"isInExperiment homeScreen");
         

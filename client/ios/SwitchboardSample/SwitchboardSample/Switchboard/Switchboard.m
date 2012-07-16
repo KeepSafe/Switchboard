@@ -258,7 +258,7 @@ static Switchboard *sharedInstance = nil;
     // get the main url from preferences
     NSString *urlString = [SBPreferences getMainURL];
 
-    // 
+    // Setup the params for the url query string
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     [params setObject:uuid forKey:@"uuid"];
     [params setObject:device forKey:@"device"];
@@ -268,39 +268,68 @@ static Switchboard *sharedInstance = nil;
     [params setObject:packageName forKey:@"appId"];
     [params setObject:versionName forKey:@"version"];
     
+    // print debug log
     if(_debug) { SBLog(@"Sending params for configuration: %@", params); }
     
-    NSString *queryString = @"";
+    // build the query string
+    NSString *queryString = @"?";
+    
+    // iterate through the keys in the parameters
     for(NSString *key in [params allKeys]) {
+        
+        // append the format to the query string
         queryString = [queryString stringByAppendingFormat:@"%@=%@&", key, [[params objectForKey:key] urlEncode]];
     }
     
-    urlString = [urlString stringByAppendingFormat:@"?%@", queryString];
+    // append the query string to the url string
+    urlString = [urlString stringByAppendingString:queryString];
     
+    // print debug log
     if(_debug) { SBLog(@"Calling url: %@", urlString); }
     
+    // construct our request
     NSURL *url = [NSURL URLWithString:urlString];
     NSURLRequest *urlRequest = [NSURLRequest requestWithURL:url];
     
+    // send the request asynchronously
     [NSURLConnection sendAsynchronousRequest:urlRequest 
-                                       queue:_requestQueue 
+                                       queue:_requestQueue // use our request queue. this throttles so we minimize footprint
                            completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {
                                
                                // got data
                                if ([data length] > 0 && error == nil) {
                                    
+                                   // convert the NSData value into a readable string
                                    NSString *responseString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+                                   
+                                   // print debug log
                                    if(_debug) { SBLog(@"Response: %@", responseString); }
 
+                                   // parse the response string into a json dictionary
                                    NSDictionary *json = [responseString JSONValue];
                                    
-                                   [SBPreferences setConfigurationJSON:json];
+                                   // store the config to persistent preferences
+                                   if(json != nil) {
+                                       [SBPreferences setConfigurationJSON:json];                                       
+
+                                       // print debug
+                                       if(_debug) { SBLog(@"Updated server config: %@", json); }
+
+                                   }
+                                   
+                                   // there was an error parsing the response
+                                   else {
+                                       
+                                       if(_debug) {
+                                           SBLog(@"Error updating configuration: unable to parse response");
+                                       }
+                                       
+                                   }
                                                                       
-                                   if(_debug) { SBLog(@"Updated server config: %@", json); }
                                    
                                } 
                                
-                               // download error
+                               // error occurred
                                else {
 
                                    if(_debug) {
