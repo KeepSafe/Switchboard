@@ -36,7 +36,8 @@ Consistency in user segmentation is one of the most important things in A/B test
 
 ## How to use it
 ### Client
-Switchboard is currently only available for Android. iOS support will be available very soon.
+The Switchboard client lib is available for android and iOS. The following examples give you a brief overview on how to get started. You can find a more in depth 
+documentation under the [Wiki](https://github.com/KeepSafe/Switchboard/wiki)
 
 #### Android
 Link the Switchboard project to your andorid project as a library project. You only need to initialize the Switchboard core at the application start once. 
