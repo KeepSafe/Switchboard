@@ -134,8 +134,13 @@ You can do more complex things if you want:
 [GPL v3](http://www.gnu.org/licenses/gpl.txt) read more in the license.txt
 
 ## Authors
-Switchboard is brought to you by Philipp Berner and Zouhair Belkoura, founders of KeepSafe.
+Switchboard is brought to you by [Philipp Berner](https://github.com/philippb) and [Zouhair Belkoura](https://github.com/zouhairb), founders of KeepSafe.
 We'd love to have you contribute.
+
+## Contributors
+Special thanks goes to our contributors
+
+- [Chris Beauchamp](https://github.com/cjbeauchamp)
 
 ## Used in production by
 * KeepSafe (www.getkeepsafe.com)
