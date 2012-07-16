@@ -1,11 +1,13 @@
 <?php
 
+require_once("SwitchboardConfig.php");
+
 $returnArray = array(
 	//path to this file
-	'updateServerUrl' => "http://switchboard.herokuapp.com/currentServerUrl.php",
+	'updateServerUrl' => UPDATE_SERVER_URL,
 	
 	//path to config.php file where the actual dynamic config is generated
-	'configServerUrl' => "http://switchboard.herokuapp.com/config.php"
+	'mainServerUrl' => MAIN_SERVER_URL
 );
 
 header('Content-type: application/json');
