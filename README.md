@@ -127,3 +127,6 @@ TODO Switchboard will probably be distributed under the GPLv3 license
 ## Authors
 Switchboard is brought to you by Philipp Berner and Zouhair Belkoura, founders of KeepSafe.
 We'd love to have you contribute.
+
+## Used in production by
+* KeepSafe (www.getkeepsafe.com)
