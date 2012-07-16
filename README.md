@@ -122,7 +122,7 @@ You can do more complex things if you want:
 ```
 
 ## License
-TODO Switchboard will probably be distributed under the GPLv3 license
+[GPL v3](http://www.gnu.org/licenses/gpl.txt) read more in the license.txt
 
 ## Authors
 Switchboard is brought to you by Philipp Berner and Zouhair Belkoura, founders of KeepSafe.
