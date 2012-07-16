@@ -27,8 +27,8 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
 
-    [Switchboard beginWithServerURL:@"http://switchboard-ios.herokuapp.com/SwitchboardURLs.php" 
-                         andMainURL:@"http://switchboard-ios.herokuapp.com/SwitchboardDriver.php" 
+    [Switchboard beginWithServerURL:@"http://switchboard.herokuapp.com/SwitchboardURLs.php" 
+                         andMainURL:@"http://switchboard.herokuapp.com/SwitchboardDriver.php" 
                            andDebug:TRUE];
         
     [Switchboard updateServerURLs];
