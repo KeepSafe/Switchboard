@@ -97,6 +97,9 @@ You can do more complex things if you want:
 ```php
 	//put a percentage of users in the test and vary smile width
 	$resultArray['showSmiley'] = smileyVariation($uuid, $lang);
+	
+	//return result array as JSON
+    renderResultJson($resultArray);
 
 	function smileyVariation($uuid, $lang){
 		if (empty($uuid))
@@ -109,9 +112,10 @@ You can do more complex things if you want:
 			//and then vary the values
 			if ($lang == "eng"){ //broad smiles in US
 				$values['width'] = 10;
-			}
-			if ($lang == "deu"){ //more subtle in Germany
+			} else if ($lang == "deu"){ //more subtle in Germany
 				$values['width'] = 9;
+			} else {
+				return inactiveExperimentReturnArray();
 			}
 			return activeExperimentReturnArray($values);
 		}
