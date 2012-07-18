@@ -138,7 +138,7 @@ You can do more complex things if you want:
 Please us the [Github Issue tracker](https://github.com/KeepSafe/Switchboard/issues) to commit bugs
 
 ## License
-[GPL v3](http://www.gnu.org/licenses/gpl.txt) read more in the license.txt
+Switchboard is licensed under the [Apache Software License, 2.0 ("Apache 2.0")](http://www.apache.org/licenses/LICENSE-2.0)
 
 ## Authors
 Switchboard is brought to you by [Philipp Berner](https://github.com/philippb) and [Zouhair Belkoura](https://github.com/zouhairb), founders of KeepSafe.
