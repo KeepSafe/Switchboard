@@ -1,0 +1,219 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Switchboard by KeepSafe</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Switchboard</h1>
+        <p>Switchboard - easy and super light weight A/B testing for your mobile app. This mobile A/B testing framework allows you with minimal servers to run large amounts of mobile users.</p>
+
+        <p class="view"><a href="https://github.com/KeepSafe/Switchboard">View the Project on GitHub <small>KeepSafe/Switchboard</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/KeepSafe/Switchboard/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/KeepSafe/Switchboard/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/KeepSafe/Switchboard">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>Switchboard - easy A/B testing for your mobile app</h1>
+
+<h2>What it does</h2>
+
+<p>Switchboard is a simple way to remote control your mobile application even after you shipped it to your users'
+devices.
+Use switchboard to</p>
+
+<ul>
+<li>Stage-rollout new features to users</li>
+<li>A/B-test user flows, messaging, colors, features</li>
+<li>anything you want to remote-control</li>
+</ul><p>Switchboard lets you control what happens in your app. Quick, easy, useful.</p>
+
+<p><em>Switchboard segments your users consistently.</em> Because user segmentation is based only on UUID that is computed once, the experience you switch on and off using Switchboard is consistent across sessions.</p>
+
+<h2>What it does not do (what you have to do yourself)</h2>
+
+<p>Switchboard does not give you analytics, nor does it automatic administration and optimization of your A/B tests. It also doesn't give you nice graphs and stuff. You can get all of that by plugging an analytics package into your app which you're probably doing anyway.</p>
+
+<h2>Features</h2>
+
+<ul>
+<li>Consistent user segmentation based on device ID</li>
+<li>Define experiments for specific application versions, OS version, language settings and more</li>
+<li>Comes with build in configuration for production and staging environment</li>
+<li>Highly scalable</li>
+<li>Safe when device is offline</li>
+<li>Flexible custom parameters for experiments</li>
+</ul><h2>What Switchboard was designed for</h2>
+
+<p>Switchboard was design as a super light weight and very flexible mobile A/B testing framework. </p>
+
+<h3>Infrastructure</h3>
+
+<p>The goal was to serve millions of requests very reliable without much infrastructure. It should easy scale horizontally to avoid overhead in
+maintaining it while your application scales. It is designed without a database or any other type of persistent storage that would slow
+it down.</p>
+
+<h3>User segmentation</h3>
+
+<p>Consistency in user segmentation is one of the most important things in A/B testing. This means that one individual user will always have a consistent experience
+ over time. Switchboard does consistent user segmentation based on a unique device id.</p>
+
+<h2>How to use it</h2>
+
+<h3>Client</h3>
+
+<p>The Switchboard client lib is available for android and iOS. The following examples give you a brief overview on how to get started. You can find a more in depth 
+documentation under the <a href="https://github.com/KeepSafe/Switchboard/wiki">Wiki</a></p>
+
+<h4>Android</h4>
+
+<p>Link the Switchboard project to your andorid project as a library project. You only need to initialize the Switchboard core at the application start once. 
+Then, you can add switches to your app and have the Switchboard give you the current state.</p>
+
+<p>You can customize the DynamicConfigManager to send all sorts of information to the Switchboard server for control decisions, e.g. location, OS version, device, language.</p>
+
+<p>Here's some on/off switch example code on Android:</p>
+
+<div class="highlight"><pre>    <span class="n">Context</span> <span class="n">myContext</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="na">getApplicationContext</span><span class="o">();</span>
+    <span class="n">String</span> <span class="n">experimentName</span> <span class="o">=</span> <span class="s">"showSmiley"</span><span class="o">;</span>
+
+    <span class="c1">//get settings from Switchboard</span>
+    <span class="kt">boolean</span> <span class="n">isSmiling</span> <span class="o">=</span> <span class="n">Switchboard</span><span class="o">.</span><span class="na">isInExperiment</span><span class="o">(</span><span class="n">myContext</span><span class="o">,</span> <span class="n">experimentName</span><span class="o">);</span>
+
+    <span class="c1">//Switching code for testing</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">isSmiling</span><span class="o">)</span> <span class="c1">//variant A</span>
+        <span class="n">showSmileyWelcomeMessage</span><span class="o">();</span>
+    <span class="k">else</span> <span class="c1">//variant B</span>
+        <span class="n">showFrownyFace</span><span class="o">();</span>
+</pre></div>
+
+<p>And it works for varying any value too. Again, on Android:</p>
+
+<div class="highlight"><pre>    <span class="k">if</span> <span class="o">(</span><span class="n">isSmiling</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span><span class="o">(</span><span class="n">Switchboard</span><span class="o">.</span><span class="na">hasExperimentValues</span><span class="o">(</span><span class="n">myContext</span><span class="o">,</span> <span class="n">experimentName</span><span class="o">))</span> <span class="o">{</span>
+
+            <span class="c1">//get remote controlled values from Switchboard</span>
+            <span class="n">JSONObject</span> <span class="n">smileValues</span> <span class="o">=</span> <span class="n">Switchboard</span><span class="o">.</span><span class="na">getExperimentValueFromJson</span><span class="o">(</span><span class="n">myContext</span><span class="o">,</span> <span class="n">experimentName</span><span class="o">);</span>
+
+            <span class="kt">int</span> <span class="n">smileWidth</span> <span class="o">=</span> <span class="n">smileValues</span><span class="o">.</span><span class="na">getInt</span><span class="o">(</span><span class="s">"width"</span><span class="o">);</span>
+
+            <span class="c1">//do something with it</span>
+            <span class="n">prepareSmiley</span><span class="o">(</span><span class="n">smileWidth</span><span class="o">);</span>
+            <span class="n">showSmileyWelcomeMessage</span><span class="o">();</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+</pre></div>
+
+<h4>iOS</h4>
+
+<p>Please look at the iOS sample implementation under <a href="https://github.com/KeepSafe/Switchboard/tree/master/client/ios/SwitchboardSample">client/ios/SwitchboardSample</a></p>
+
+<h3>Server</h3>
+
+<p>The server receives a UUID that the client generated as well as many other parameters like app version, OS version, device language, location.
+Users are divided into 100 consistent user buckets. Switchboard makes it incredible easy to write new tests based on the given parameters.</p>
+
+<p>Example code of the PHP implementation for a simple on/off switch:</p>
+
+<div class="highlight"><pre><span class="x">    $manager = new SwitchboardManager($_GET);</span>
+
+<span class="x">    //put 50% of your users into the showSmiley A/B test</span>
+<span class="x">    $resultArray['showSmiley'] = $manager-&gt;turnOnBucket(0, 50);</span>
+
+<span class="x">    //return result array as JSON</span>
+<span class="x">    $manager-&gt;renderResultJson($resultArray);</span>
+</pre></div>
+
+<p>You can do more complex things if you want:</p>
+
+<div class="highlight"><pre><span class="x">    $manager = new SwitchboardManager($_GET);</span>
+<span class="x">    $experiments = new SwitchboardExperiments($manager);</span>
+
+<span class="x">    //put a percentage of users in the test and vary smile width</span>
+<span class="x">    $resultArray['showSmiley'] = $experiments-&gt;smileyVariation($uuid, $lang);</span>
+
+<span class="x">    //return result array as JSON</span>
+<span class="x">    $manager-&gt;renderResultJson($resultArray);</span>
+
+<span class="x">    class SwitchboardExperiments {</span>
+<span class="x">        function smileyVariation($uuid, $lang){</span>
+
+<span class="x">            //turn it on for 50% only</span>
+<span class="x">            if ($this-&gt;$manager-&gt;isInBucket($uuid, 0, 50)){</span>
+
+<span class="x">                $values = array();</span>
+<span class="x">                //and then vary the values</span>
+<span class="x">                if ($this-&gt;$manager-&gt;$lang == "eng"){ //broad smiles in US</span>
+<span class="x">                    $values['width'] = 10;</span>
+<span class="x">                } else if ($this-&gt;$manager-&gt;$lang == "deu"){ //more subtle in Germany</span>
+<span class="x">                    $values['width'] = 9;</span>
+<span class="x">                } else {</span>
+<span class="x">                    return $this-&gt;$manager-&gt;inactiveExperimentReturnArray();</span>
+<span class="x">                }</span>
+<span class="x">                return $this-&gt;$manager-&gt;activeExperimentReturnArray($values);</span>
+<span class="x">            }</span>
+
+<span class="x">            //default</span>
+<span class="x">            return $this-&gt;$manager-&gt;inactiveExperimentReturnArray();</span>
+<span class="x">        }</span>
+<span class="x">    }</span>
+</pre></div>
+
+<h2>Problems &amp; Bugs</h2>
+
+<p>Please us the <a href="https://github.com/KeepSafe/Switchboard/issues">Github Issue tracker</a> to commit bugs</p>
+
+<h2>License</h2>
+
+<p>Switchboard is licensed under the <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache Software License, 2.0 ("Apache 2.0")</a></p>
+
+<h2>Authors</h2>
+
+<p>Switchboard is brought to you by <a href="https://github.com/philippb">Philipp Berner</a> and <a href="https://github.com/zouhairb">Zouhair Belkoura</a>, founders of KeepSafe.
+We'd love to have you contribute.</p>
+
+<h2>Contributors</h2>
+
+<p>Special thanks goes to our contributors</p>
+
+<ul>
+<li><a href="https://github.com/cjbeauchamp">Chris Beauchamp</a></li>
+</ul><h2>Used in production by</h2>
+
+<ul>
+<li>KeepSafe (<a href="http://www.getkeepsafe.com">www.getkeepsafe.com</a>)</li>
+</ul>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/KeepSafe">KeepSafe</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+              <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-25612652-5");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
+
+  </body>
+</html>
