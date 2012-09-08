@@ -134,6 +134,10 @@ You can do more complex things if you want:
 	}
 ```
 
+## More information on how to use it
+* [KeepSafe Engineering Blog](http://keepsafe-engineering.tumblr.com/post/28437940369/easy-mobile-ab-testing)
+* [Quora](http://www.quora.com/A-B-Testing/What-is-the-best-way-to-do-A-B-testing-for-mobile-apps)
+
 ## Problems & Bugs
 Please us the [Github Issue tracker](https://github.com/KeepSafe/Switchboard/issues) to commit bugs
 
