@@ -129,51 +129,56 @@ Users are divided into 100 consistent user buckets. Switchboard makes it incredi
 
 <p>Example code of the PHP implementation for a simple on/off switch:</p>
 
-<div class="highlight"><pre><span class="x">    $manager = new SwitchboardManager($_GET);</span>
+<div class="highlight"><pre>    <span class="nv">$manager</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">SwitchboardManager</span><span class="p">(</span><span class="nv">$_GET</span><span class="p">);</span>
 
-<span class="x">    //put 50% of your users into the showSmiley A/B test</span>
-<span class="x">    $resultArray['showSmiley'] = $manager-&gt;turnOnBucket(0, 50);</span>
+    <span class="c1">//put 50% of your users into the showSmiley A/B test</span>
+    <span class="nv">$resultArray</span><span class="p">[</span><span class="s1">'showSmiley'</span><span class="p">]</span> <span class="o">=</span> <span class="nv">$manager</span><span class="o">-&gt;</span><span class="na">turnOnBucket</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">50</span><span class="p">);</span>
 
-<span class="x">    //return result array as JSON</span>
-<span class="x">    $manager-&gt;renderResultJson($resultArray);</span>
+    <span class="c1">//return result array as JSON</span>
+    <span class="nv">$manager</span><span class="o">-&gt;</span><span class="na">renderResultJson</span><span class="p">(</span><span class="nv">$resultArray</span><span class="p">);</span>
 </pre></div>
 
 <p>You can do more complex things if you want:</p>
 
-<div class="highlight"><pre><span class="x">    $manager = new SwitchboardManager($_GET);</span>
-<span class="x">    $experiments = new SwitchboardExperiments($manager);</span>
+<div class="highlight"><pre>    <span class="nv">$manager</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">SwitchboardManager</span><span class="p">(</span><span class="nv">$_GET</span><span class="p">);</span>
+    <span class="nv">$experiments</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">SwitchboardExperiments</span><span class="p">(</span><span class="nv">$manager</span><span class="p">);</span>
 
-<span class="x">    //put a percentage of users in the test and vary smile width</span>
-<span class="x">    $resultArray['showSmiley'] = $experiments-&gt;smileyVariation($uuid, $lang);</span>
+    <span class="c1">//put a percentage of users in the test and vary smile width</span>
+    <span class="nv">$resultArray</span><span class="p">[</span><span class="s1">'showSmiley'</span><span class="p">]</span> <span class="o">=</span> <span class="nv">$experiments</span><span class="o">-&gt;</span><span class="na">smileyVariation</span><span class="p">(</span><span class="nv">$uuid</span><span class="p">,</span> <span class="nv">$lang</span><span class="p">);</span>
 
-<span class="x">    //return result array as JSON</span>
-<span class="x">    $manager-&gt;renderResultJson($resultArray);</span>
+    <span class="c1">//return result array as JSON</span>
+    <span class="nv">$manager</span><span class="o">-&gt;</span><span class="na">renderResultJson</span><span class="p">(</span><span class="nv">$resultArray</span><span class="p">);</span>
 
-<span class="x">    class SwitchboardExperiments {</span>
-<span class="x">        function smileyVariation($uuid, $lang){</span>
+    <span class="k">class</span> <span class="nc">SwitchboardExperiments</span> <span class="p">{</span>
+        <span class="k">function</span> <span class="nf">smileyVariation</span><span class="p">(</span><span class="nv">$uuid</span><span class="p">,</span> <span class="nv">$lang</span><span class="p">){</span>
 
-<span class="x">            //turn it on for 50% only</span>
-<span class="x">            if ($this-&gt;$manager-&gt;isInBucket($uuid, 0, 50)){</span>
+            <span class="c1">//turn it on for 50% only</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="nv">$manager</span><span class="o">-&gt;</span><span class="na">isInBucket</span><span class="p">(</span><span class="nv">$uuid</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">50</span><span class="p">)){</span>
 
-<span class="x">                $values = array();</span>
-<span class="x">                //and then vary the values</span>
-<span class="x">                if ($this-&gt;$manager-&gt;$lang == "eng"){ //broad smiles in US</span>
-<span class="x">                    $values['width'] = 10;</span>
-<span class="x">                } else if ($this-&gt;$manager-&gt;$lang == "deu"){ //more subtle in Germany</span>
-<span class="x">                    $values['width'] = 9;</span>
-<span class="x">                } else {</span>
-<span class="x">                    return $this-&gt;$manager-&gt;inactiveExperimentReturnArray();</span>
-<span class="x">                }</span>
-<span class="x">                return $this-&gt;$manager-&gt;activeExperimentReturnArray($values);</span>
-<span class="x">            }</span>
+                <span class="nv">$values</span> <span class="o">=</span> <span class="k">array</span><span class="p">();</span>
+                <span class="c1">//and then vary the values</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="nv">$manager</span><span class="o">-&gt;</span><span class="nv">$lang</span> <span class="o">==</span> <span class="s2">"eng"</span><span class="p">){</span> <span class="c1">//broad smiles in US</span>
+                    <span class="nv">$values</span><span class="p">[</span><span class="s1">'width'</span><span class="p">]</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>
+                <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="nv">$manager</span><span class="o">-&gt;</span><span class="nv">$lang</span> <span class="o">==</span> <span class="s2">"deu"</span><span class="p">){</span> <span class="c1">//more subtle in Germany</span>
+                    <span class="nv">$values</span><span class="p">[</span><span class="s1">'width'</span><span class="p">]</span> <span class="o">=</span> <span class="mi">9</span><span class="p">;</span>
+                <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                    <span class="k">return</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="nv">$manager</span><span class="o">-&gt;</span><span class="na">inactiveExperimentReturnArray</span><span class="p">();</span>
+                <span class="p">}</span>
+                <span class="k">return</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="nv">$manager</span><span class="o">-&gt;</span><span class="na">activeExperimentReturnArray</span><span class="p">(</span><span class="nv">$values</span><span class="p">);</span>
+            <span class="p">}</span>
 
-<span class="x">            //default</span>
-<span class="x">            return $this-&gt;$manager-&gt;inactiveExperimentReturnArray();</span>
-<span class="x">        }</span>
-<span class="x">    }</span>
+            <span class="c1">//default</span>
+            <span class="k">return</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="nv">$manager</span><span class="o">-&gt;</span><span class="na">inactiveExperimentReturnArray</span><span class="p">();</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
 </pre></div>
 
-<h2>Problems &amp; Bugs</h2>
+<h2>More information on how to use it</h2>
+
+<ul>
+<li><a href="http://keepsafe-engineering.tumblr.com/post/28437940369/easy-mobile-ab-testing">KeepSafe Engineering Blog</a></li>
+<li><a href="http://www.quora.com/A-B-Testing/How-do-companies-practically-A-B-Test-new-versions-of-native-mobile-apps-that-are-already-in-production">Quora</a></li>
+</ul><h2>Problems &amp; Bugs</h2>
 
 <p>Please us the <a href="https://github.com/KeepSafe/Switchboard/issues">Github Issue tracker</a> to commit bugs</p>
 
