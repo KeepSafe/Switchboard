@@ -63,7 +63,7 @@ class SwitchboardManager {
     }
     
     /** The quickest way to generate an A/B test. Sets experiment to active when user is with the defined bucked.
-      * $low cincluding, $high excluding
+      * $low including, $high excluding
       */
     function turnOnBucket($low, $high) {
     	if(empty($this->uuid)) 
@@ -86,7 +86,7 @@ class SwitchboardManager {
     		return false;
     }
     
-    /** Gives a relt array fora an experiemnt the user is part of. Optional takes a array of values that can 
+    /** Gives a result array for an experiement the user is part of. Optional takes a array of values that can 
       * be received at the client.
       */
     function activeExperimentReturnArray($values = null) {
@@ -111,7 +111,7 @@ class SwitchboardManager {
     /********************************************************************************/
     
     /**
-      * Return the bucket number of the user. There a 100 possible buckes.
+      * Return the bucket number of the user. There a 100 possible buckets.
       */  
     function getUserBucket() {
     
