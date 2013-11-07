@@ -23,7 +23,7 @@ class SwitchboardExperiments {
         $this->manager = $manager;
     }    
     
-    /** Sample experiment that gives 20% of the users a message. Those 20% are devided into two groups that
+    /** Sample experiment that gives 20% of the users a message. Those 20% are divided into two groups that
       * get to see a different message
       */
     function sample() {
@@ -31,8 +31,8 @@ class SwitchboardExperiments {
     	if(empty($this->manager->uuid))
     		return $this->manager->inactiveExperimentReturnArray();
     	
-    	//turn expiriment on for bucket 0-19. First 20% of the users
-    	if($this->manager->isInBucket(0, 100)) {
+    	//turn experiment on for bucket 0-19. First 20% of the users
+    	if($this->manager->isInBucket(0, 20)) {
 
     		//return values
     		$values = array();
