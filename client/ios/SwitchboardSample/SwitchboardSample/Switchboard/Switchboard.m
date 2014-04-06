@@ -263,7 +263,11 @@ static Switchboard *sharedInstance = nil;
     [params setObject:uuid forKey:@"uuid"];
     [params setObject:device forKey:@"device"];
     [params setObject:language forKey:@"lang"];
-    [params setObject:country forKey:@"country"];
+    
+    if (country != nil) {
+        [params setObject:country forKey:@"country"];
+    }
+    
     [params setObject:manufacturer forKey:@"manufacturer"];
     [params setObject:packageName forKey:@"appId"];
     [params setObject:versionName forKey:@"version"];
