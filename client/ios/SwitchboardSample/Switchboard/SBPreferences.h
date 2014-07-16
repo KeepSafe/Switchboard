@@ -10,12 +10,12 @@
 
 @interface SBPreferences : NSObject
 
-+ (void) setServerURL:(NSString*)serverURL andMainURL:(NSString*)mainURL;
++ (void) setServerURL:(NSString *)serverURL andMainURL:(NSString *)mainURL;
 
-+ (NSString*) getServerURL;
-+ (NSString*) getMainURL;
++ (NSString *) getServerURL;
++ (NSString *) getMainURL;
 
-+ (void) setConfigurationJSON:(NSDictionary*)json;
-+ (NSDictionary*) getConfigurationJSON;
++ (void) setConfigurationJSON:(NSDictionary *)json;
++ (NSDictionary *) getConfigurationJSON;
 
 @end

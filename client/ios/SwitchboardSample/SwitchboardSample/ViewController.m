@@ -7,63 +7,50 @@
 //
 
 #import "ViewController.h"
-
 #import "Switchboard.h"
 
+#pragma mark -
+#pragma mark ViewController
+#pragma mark -
+
+#pragma mark -> Class Extension
 @interface ViewController ()
 
 @end
 
+#pragma mark -> Implementation
 @implementation ViewController
 
-@synthesize messageTitle;
-@synthesize messageText;
+#pragma mark -> Private methodes
 
-- (void) refreshMessage {
-        
-    if([Switchboard isInExperiment:@"homeScreenMessage"]) {
-        
-        NSLog(@"isInExperiment homeScreen");
-        
-        if([Switchboard hasExperimentValues:@"homeScreenMessage"]) {
-            
-            NSLog(@"has values");
-            
-            NSDictionary *values = [Switchboard getExperimentValueFromJSON:@"homeScreenMessage"];
-            
-            messageText.text = [values objectForKey:@"message"];
-            messageTitle.text = [values objectForKey:@"messageTitle"];
-            
-            NSLog(@"Got values:");
-            NSLog(@"Message: %@", messageText.text);
-            NSLog(@"MessageTitle: %@", messageTitle.text);
-            
-        }
-        
-    }
+- (void)refreshMessage {
+	if ([Switchboard isInExperiment:@"homeScreenMessage"]) {
+		NSLog(@"isInExperiment homeScreen");
     
+		if ([Switchboard hasExperimentValues:@"homeScreenMessage"]) {
+			NSLog(@"has values");
+      
+			NSDictionary *values = [Switchboard getExperimentValueFromJSON:@"homeScreenMessage"];
+      
+			self.messageText.text = [values objectForKey:@"message"];
+			self.messageTitle.text = [values objectForKey:@"messageTitle"];
+      
+			NSLog(@"Got values:");
+			NSLog(@"Message: %@", self.messageText.text);
+			NSLog(@"MessageTitle: %@", self.messageTitle.text);
+		}
+	}
 }
 
-- (void) viewDidAppear:(BOOL)animated {
-    [self refreshMessage];
+#pragma mark -> UIViewController methodes
+
+- (void)viewDidAppear:(BOOL)animated {
+	[self refreshMessage];
 }
 
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
+- (void)viewDidLoad {
+	[super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
-}
-
-- (void)viewDidUnload
-{
-    [super viewDidUnload];
-    // Release any retained subviews of the main view.
-}
-
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
-    [self refreshMessage];
-    return (interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
 }
 
 @end
