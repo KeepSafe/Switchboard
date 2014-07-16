@@ -95,7 +95,7 @@ And it works for varying any value too. Again, on Android:
   $ pod update 
 ```
 
-##### Use Switchbaord in your project 
+##### Use Switchboard in your project 
 1. Open your AppDelegate.m and initialize your Switchboard like this:
 ```Objective-C
   - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
