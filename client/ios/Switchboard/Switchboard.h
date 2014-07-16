@@ -14,105 +14,65 @@
  *
  * The SwitchBoard supports production and staging environment.
  *
- * For usage <code>initDefaultServerUrls</code> for first time usage. Server URLs can be updates from
- * a remote location with <code>initConfigServerUrl</code>.
+ * For usage <code>beginWithServerURL:andMainURL:andDebug:</code> for first time usage. Server URLs are automatically update from
+ * a remote location. Values for scenario are automatically updated from a remote location or load from the disk.
  *
- * To run an experiment use <code>isInExperiment:</code>. The experiment name must match an experiment
+ * To run an experiment use <code>experiment:completionBlock:</code>.
  * that is set up on the server.
  *
- * All functions are design to be safe for programming mistakes and network connection issues. If the
- * experiment does not exists it will return false and pretend the user is not part of it.
+ * All functions are design to be safe for programming mistakes and network connection issues.
  *
  * @author Chris Beauchamp
+ * @updated Christophe Braud
  *
  */
-@interface Switchboard : NSObject 
+@interface Switchboard : NSObject
 
 /**
  * Basic initialization with one server.
- * @param serverURL Url to: http://sub.domain/path_to/SwitchboardURLs.php
- * @param mainURL Url to: http://sub.domain/path_to/SwitchboardDriver.php - the acutall config
- * @param debug Is the application running in debug mode. This will add log messages.
+ * @param pServerURL Url to: http://sub.domain/path_to/SwitchboardURLs.php
+ * @param pMainURL Url to: http://sub.domain/path_to/SwitchboardDriver.php - the acutall config
+ * @param pDebug Is the application running in debug mode. This will add log messages.
  */
-+ (void) beginWithServerURL:(NSString *)serverURL
-                 andMainURL:(NSString *)mainURL
-                   andDebug:(BOOL)debug;
++ (void)beginWithServerURL:(NSString *)pServerURL
+                andMainURL:(NSString *)pMainURL
+                  andDebug:(BOOL)pDebug;
 
 /**
  * Advanced initialization that supports a production and staging environment without changing the server URLs manually.
- * SwitchBoard will connect to the staging environment in debug mode. This makes it very simple to test new experiements
- * during development.
- * @param serverURL Url to http://sub.domain/path_to/SwitchboardURLs.php in production environment
- * @param serverURLStage Url to http://sub.domain/path_to/SwitchboardURLs.php in staging environment
- * @param mainURL Url to: http://sub.domain/path_to/SwitchboardDriver.php in production - the acutal config
- * @param mainURLStage Url to: http://sub.domain/path_to/SwitchboardDriver.php in production - the acutal config
- * @param debug Defines if the app runs in debug.
+ * SwitchBoard will connect to the staging environment in debug mode. Automatically this method update the URLs from
+ * the server and load values of scenarios.
+ * @param pServerURL Url to http://sub.domain/path_to/SwitchboardURLs.php in production environment
+ * @param pServerURLStage Url to http://sub.domain/path_to/SwitchboardURLs.php in staging environment
+ * @param pMainURL Url to: http://sub.domain/path_to/SwitchboardDriver.php in production - the acutal config
+ * @param pMainURLStage Url to: http://sub.domain/path_to/SwitchboardDriver.php in production - the acutal config
+ * @param pDebug Defines if the app runs in debug.
  */
-+ (void) beginWithServerURL:(NSString *)serverURL
-          andServerURLStage:(NSString *)serverURLStage
-                 andMainURL:(NSString *)mainURL
-            andMainURLStage:(NSString *)mainURLStage
-                   andDebug:(BOOL)debug;
-
-/** See if the application is run in debug mode. downloadConfiguration runs against staging server when in debug and production when not */
-+ (BOOL) isInDebugMode;
++ (void)beginWithServerURL:(NSString *)pServerURL
+         andServerURLStage:(NSString *)pServerURLStage
+                andMainURL:(NSString *)pMainURL
+           andMainURLStage:(NSString *)pMainURLStage
+                  andDebug:(BOOL)pDebug;
 
 /**
- * Updates the server URLs from remote and stores it locally in the app. This allows to move the server side
- * with users already using Switchboard.
- * When there is no internet connection it will continue to use the URLs from the last time or
- * default URLS that have been set with <code>beginWithServerURL:...</code>.
- *
- * This method is asynchronous, and will not block your main thread
+ * Execute the completion block if the experiment exist and if it's active. The block receive the values for the experimentation.
+ * @param pExperimentName Name of the experiment to lookup
+ * @param pCompletionBlock execute the block if the experiment exist and is active
  */
-+ (void) updateServerURLs;
++ (void)experiment:(NSString *)pExperimentName completionBlock:(void (^)(NSDictionary *pValues))pCompletionBlock;
 
 /**
- * Loads a new config file for the specific user from current config server. Uses internal unique user ID.
- * This method is asynchronous, and will not block your main thread
+ * When the URLs are updated and the values of scenarios are loaded the block is executed.
+ * @param pCompletionBlock execute the block if the experiment exist and is active
  */
-+ (void) downloadConfiguration;
++ (void)whenReady:(void (^)(void))pCompletionBlock;
 
 /**
- * Loads a new config for a user. This method allows you to pass your own unique user ID instead of using
- * the SwitchBoard internal user ID.
- * This method is asynchronous, and will not block your main thread
- * @param uuid Custom unique user ID
+ * Update the URLs from a remote location and update values of scenarios.
  */
-+ (void) downloadConfigurationWithCustomUUID:(NSString *)uuid;
++ (void)refreshScenario;
 
-/**
- * Looks up in config if user is in certain experiment. Returns false as a default value when experiment
- * does not exist.
- * Experiment names are defined server side as Key in array for return values.
- * @param experimentName Name of the experiment to lookup
- * @return returns value for experiment or false if experiment does not exist.
- */
-+ (BOOL) isInExperiment:(NSString *)experimentName;
-
-/**
- * Looks up in config if user is in certain experiment.
- * Experiment names are defined server side as Key in array for return values.
- * @param experimentName Name of the experiment to lookup
- * @param defaultValue The return value that should be return when experiment does not exist
- * @return returns value for experiment or defaultReturnVal if experiment does not exist.
- */
-+ (BOOL) isInExperiment:(NSString *)experimentName withDefault:(BOOL)defaultValue;
-
-/**
- * Checks if a certain experiment exists.
- * @param experimentName Name of the experiment
- * @return TRUE when experiment exists
- */
-+ (BOOL) hasExperimentValues:(NSString *)experimentName;
-
-/**
- * Returns the experiment value as an NSDictionary. Depending on what experiment is has to be converted to the right type.
- * Typcasting is by convention. You have to know what is in there. Use <code>hasExperimentValues:</code>
- * before this to avoid a nil return value.
- * @param experimentName Name of the experiment to lookup
- * @return Experiment value as NSDictionary, null if experiment does not exist.
- */
-+ (NSDictionary *) getExperimentValueFromJSON:(NSString *)experimentName;
+/** See if the application is run in debug mode.*/
++ (BOOL)debugMode;
 
 @end

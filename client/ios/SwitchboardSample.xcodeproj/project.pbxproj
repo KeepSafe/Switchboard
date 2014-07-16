@@ -14,7 +14,6 @@
 		081ADFE915B3B532003FA973 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 081ADFE815B3B532003FA973 /* main.m */; };
 		081ADFED15B3B532003FA973 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 081ADFEC15B3B532003FA973 /* AppDelegate.m */; };
 		081ADFF015B3B532003FA973 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 081ADFEF15B3B532003FA973 /* ViewController.m */; };
-		081AE00315B3C285003FA973 /* SBPreferences.m in Sources */ = {isa = PBXBuildFile; fileRef = 081AE00215B3C285003FA973 /* SBPreferences.m */; };
 		8C6208D3197671FB00501F58 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8C6208D2197671FB00501F58 /* Images.xcassets */; };
 		8C6208D4197676DB00501F58 /* Switchboard.m in Sources */ = {isa = PBXBuildFile; fileRef = 081ADFFB15B3B996003FA973 /* Switchboard.m */; };
 		8C6208D619767F5E00501F58 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8C6208D519767F5E00501F58 /* Main.storyboard */; };
@@ -35,8 +34,6 @@
 		081ADFEF15B3B532003FA973 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		081ADFFA15B3B996003FA973 /* Switchboard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Switchboard.h; sourceTree = "<group>"; };
 		081ADFFB15B3B996003FA973 /* Switchboard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Switchboard.m; sourceTree = "<group>"; };
-		081AE00115B3C285003FA973 /* SBPreferences.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBPreferences.h; sourceTree = "<group>"; };
-		081AE00215B3C285003FA973 /* SBPreferences.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBPreferences.m; sourceTree = "<group>"; };
 		8C6208D2197671FB00501F58 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		8C6208D519767F5E00501F58 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -111,8 +108,6 @@
 		081ADFF915B3B97C003FA973 /* Switchboard */ = {
 			isa = PBXGroup;
 			children = (
-				081AE00115B3C285003FA973 /* SBPreferences.h */,
-				081AE00215B3C285003FA973 /* SBPreferences.m */,
 				081ADFFA15B3B996003FA973 /* Switchboard.h */,
 				081ADFFB15B3B996003FA973 /* Switchboard.m */,
 			);
@@ -187,7 +182,6 @@
 				081ADFED15B3B532003FA973 /* AppDelegate.m in Sources */,
 				8C6208D4197676DB00501F58 /* Switchboard.m in Sources */,
 				081ADFF015B3B532003FA973 /* ViewController.m in Sources */,
-				081AE00315B3C285003FA973 /* SBPreferences.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
