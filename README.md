@@ -103,10 +103,6 @@ And it works for varying any value too. Again, on Android:
   	[Switchboard beginWithServerURL:@"http://switchboard.herokuapp.com/SwitchboardURLs.php"
   	                     andMainURL:@"http://switchboard.herokuapp.com/SwitchboardDriver.php"
   	                       andDebug:TRUE];
-    
-  	[Switchboard updateServerURLs];
-  	[Switchboard downloadConfiguration];
-    
   	return YES;
   }
 ```
@@ -116,22 +112,16 @@ And it works for varying any value too. Again, on Android:
 - (void)viewDidLoad {
   [super viewDidLoad];
   
-  if ([Switchboard isInExperiment:@"homeScreenMessage"]) {
-    NSLog(@"isInExperiment homeScreen");
-    
-    if ([Switchboard hasExperimentValues:@"homeScreenMessage"]) {
-      NSLog(@"has values");
-      
-      NSDictionary *lValues = [Switchboard getExperimentValueFromJSON:@"homeScreenMessage"];
-      
-      self.messageText.text = [lValues objectForKey:@"message"];
-      self.messageTitle.text = [lValues objectForKey:@"messageTitle"];
+  [Switchboard whenReady:^{
+    [Switchboard experiment:@"homeScreenMessage" completionBlock:^(NSDictionary *pValues) {
+      self.messageText.text = [pValues objectForKey:@"message"];
+      self.messageTitle.text = [pValues objectForKey:@"messageTitle"];
       
       NSLog(@"Got values:");
       NSLog(@"Message: %@", self.messageText.text);
       NSLog(@"MessageTitle: %@", self.messageTitle.text);
-    }
-  }
+    }];
+  }];
 }
 ```
 
