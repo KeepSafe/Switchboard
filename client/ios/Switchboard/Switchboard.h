@@ -8,19 +8,6 @@
 
 #import <Foundation/Foundation.h>
 
-#ifdef SWITCHBOARD_DEBUG
-#define SBLog(fmt, ...) NSLog((@"Switchboard > %s [Line %d] " fmt), __PRETTY_FUNCTION__, __LINE__, ## __VA_ARGS__);
-#else
-#define SBLog(fmt, ...)
-#endif
-
-// define some server-specific dictionary keys
-#define sbUpdateServerURLKey    @"updateServerUrl"
-#define sbConfigServerURLKey    @"configServerUrl"
-
-#define sbExperimentActiveKey   @"isActive"
-#define sbExperimentValues      @"values"
-
 /**
  * SwitchBoard is the core class of the KeepSafe Switchboard mobile A/B testing framework.
  * This class provides several static methods that can be used in your app to run A/B tests.

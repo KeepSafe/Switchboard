@@ -7,24 +7,34 @@
 //
 
 #import "Switchboard.h"
-
 #import "SBPreferences.h"
 
-// the variable to hold our singleton instance
-static Switchboard *sharedInstance = nil;
+#define SBLog(fmt, ...) NSLog((@"Switchboard > %s [Line %d] " fmt), __PRETTY_FUNCTION__, __LINE__, ## __VA_ARGS__);
+
+// define some server-specific dictionary keys
+#define sbUpdateServerURLKey    @"updateServerUrl"
+#define sbConfigServerURLKey    @"configServerUrl"
+
+#define sbExperimentActiveKey   @"isActive"
+#define sbExperimentValues      @"values"
 
 @interface Switchboard () {
   // The local variables holding the server url strings.
   // These are passed in via the beginWithServerURL:... methods
-  NSString *_serverURL;
-  NSString *_mainURL;
+  NSString *serverURL;
+  NSString *mainURL;
   
   // Local variable with the current debug mode. TRUE = on.
-  BOOL _debug;
+  BOOL debug;
   
   // An operation queue to handle our HTTP requests
-  NSOperationQueue *_requestQueue;
+  NSOperationQueue *requestQueue;
 }
+
+@property (nonatomic, strong) NSString         *serverURL;
+@property (nonatomic, strong) NSString         *mainURL;
+@property (nonatomic, assign) BOOL              debug;
+@property (nonatomic, strong) NSOperationQueue *requestQueue;
 
 // This is used throughout the class, but never from outside.
 // Make a 'private' definition here.
@@ -34,30 +44,22 @@ static Switchboard *sharedInstance = nil;
 
 @implementation Switchboard
 
+@synthesize serverURL;
+@synthesize mainURL;
+@synthesize debug;
+@synthesize requestQueue;
+
 // A convenience method to store the local URL strings to
 // the persistent preferences file (if these prefs don't already exist)
-- (void) storeDefaultURLsInPreferences {
-  // get the defaults from the prefs file
-  NSString *serverURL = [SBPreferences getServerURL];
-  NSString *mainURL = [SBPreferences getMainURL];
-  
-  // if there's no server URL
-  if (serverURL == nil) {
-    // store the local var
-    serverURL = _serverURL;
-  }
-  
-  // if there's no main URL
-  if (mainURL == nil) {
-    // store the local var
-    mainURL = _mainURL;
-  }
+- (void)storeDefaultURLsInPreferences {
+  self.serverURL = [SBPreferences getServerURL];
+  self.mainURL = [SBPreferences getMainURL];
   
   // save these prefs
-  [SBPreferences setServerURL:serverURL andMainURL:mainURL];
+  [SBPreferences setServerURL:self.serverURL andMainURL:self.mainURL];
 }
 
-+ (BOOL) isInExperiment:(NSString *)pExperimentName withDefault:(BOOL)pDefaultValue {
++ (BOOL)isInExperiment:(NSString *)pExperimentName withDefault:(BOOL)pDefaultValue {
   // get the dictionary containing the current configuration
   NSDictionary *lJson = [SBPreferences getConfigurationJSON];
   BOOL          lRet = pDefaultValue;
@@ -95,18 +97,18 @@ static Switchboard *sharedInstance = nil;
   return lRet;
 }
 
-+ (BOOL) isInExperiment:(NSString *)pExperimentName {
++ (BOOL)isInExperiment:(NSString *)pExperimentName {
   // pass thru to the 'full' method
   return [Switchboard isInExperiment:pExperimentName withDefault:FALSE];
 }
 
-+ (BOOL) hasExperimentValues:(NSString *)pExperimentName {
++ (BOOL)hasExperimentValues:(NSString *)pExperimentName {
   // Convenience method for dev to quickly check if experiment values exist.
   // If not nil, values do exist.
   return [Switchboard getExperimentValueFromJSON:pExperimentName] != nil;
 }
 
-+ (NSDictionary *) getExperimentValueFromJSON:(NSString *)pExperimentName {
++ (NSDictionary *)getExperimentValueFromJSON:(NSString *)pExperimentName {
   // default to nil
   NSDictionary *lRet = nil;
   
@@ -125,24 +127,24 @@ static Switchboard *sharedInstance = nil;
   return lRet;
 }
 
-- (BOOL) isInDebugMode {
-  return _debug;
+- (BOOL)isInDebugMode {
+  return self.debug;
 }
 
-+ (BOOL) isInDebugMode {
++ (BOOL)isInDebugMode {
   // the static call must access the value in our singleton
   return [[Switchboard sharedInstance] isInDebugMode];
 }
 
 #pragma mark server sync
-- (void) updateServerURLs {
+- (void)updateServerURLs {
   // if we're debugging, this method won't do a server call.
   // it is assumed the developer has set proper URLs in the beginWithServerURL:... method
-  if (_debug) {
+  if (self.debug) {
     SBLog(@"Update server URLs");
     
     // set default value that is set in code
-    [SBPreferences setServerURL:_serverURL andMainURL:_mainURL];
+    [SBPreferences setServerURL:self.serverURL andMainURL:self.mainURL];
     return;
   }
   
@@ -151,7 +153,7 @@ static Switchboard *sharedInstance = nil;
   
   // set to default when not set in preferences
   if (lUrlString == nil) {
-    lUrlString = _serverURL;
+    lUrlString = self.serverURL;
   }
   
   // set up our request
@@ -160,13 +162,12 @@ static Switchboard *sharedInstance = nil;
   
   // make an async connection on our request queue.
   [NSURLConnection sendAsynchronousRequest:lUrlRequest
-                                     queue:_requestQueue
-                         completionHandler:^(NSURLResponse *pResponse, NSData *pData, NSError *pError) {
+                                     queue:requestQueue
+                         completionHandler: ^(NSURLResponse *pResponse, NSData *pData, NSError *pError) {
                            // got data
                            if ([pData length] > 0 && pError == nil) {
-                             
                              // print response if debugging
-                             if (_debug) {
+                             if (self.debug) {
                                // convert the NSData value into a readable string
                                NSString *lResponseString = [[NSString alloc] initWithData:pData encoding:NSUTF8StringEncoding];
                                SBLog(@"Response: %@", lResponseString);
@@ -186,7 +187,7 @@ static Switchboard *sharedInstance = nil;
                                [SBPreferences setServerURL:updateServerURL andMainURL:configServerURL];
                                
                                // print results if debugging
-                               if (_debug) {
+                               if (self.debug) {
                                  SBLog(@"Updated server url: %@", updateServerURL);
                                  SBLog(@"Updated config url: %@", configServerURL);
                                }
@@ -196,7 +197,7 @@ static Switchboard *sharedInstance = nil;
                                // load the default values into preferences
                                [self storeDefaultURLsInPreferences];
                                
-                               if (_debug) {
+                               if (self.debug) {
                                  SBLog(@"Error updating server URLs: Could not parse response");
                                }
                              }
@@ -206,20 +207,20 @@ static Switchboard *sharedInstance = nil;
                              // load the default values into preferences
                              [self storeDefaultURLsInPreferences];
                              
-                             if (_debug) {
+                             if (self.debug) {
                                SBLog(@"Error updating server URLs: %@", pError);
                              }
                            }
                          }];
 }
 
-+ (void) updateServerURLs {
++ (void)updateServerURLs {
   [[Switchboard sharedInstance] updateServerURLs];
 }
 
-- (void) downloadConfiguration:(NSString *)pUUID {
+- (void)downloadConfiguration:(NSString *)pUUID {
   // debugging, print status
-  if (_debug) {
+  if (self.debug) {
     SBLog(@"Downloading app configuration");
   }
   
@@ -239,8 +240,8 @@ static Switchboard *sharedInstance = nil;
   NSString *lManufacturer = @"Apple";
   NSString *lLanguage = [lCurrentUserLocal objectForKey:NSLocaleLanguageCode];
   NSString *lCountry = [lCurrentUserLocal objectForKey:NSLocaleCountryCode];
-  NSString *lPackageName = [lAppInfo objectForKey:@"CFBundleIdentifier"];   // Ex: com.KeepSafe.KeepSafe
-  NSString *lVersionName = [lAppInfo objectForKey:@"CFBundleShortVersionString"];   // Ex: 1.2.4
+  NSString *lPackageName = [lAppInfo objectForKey:@"CFBundleIdentifier"]; // Ex: com.KeepSafe.KeepSafe
+  NSString *lVersionName = [lAppInfo objectForKey:@"CFBundleShortVersionString"]; // Ex: 1.2.4
   
   // get the main url from preferences
   NSString *lUrlString = [SBPreferences getMainURL];
@@ -260,7 +261,7 @@ static Switchboard *sharedInstance = nil;
   [lParams setObject:lVersionName forKey:@"version"];
   
   // print debug log
-  if (_debug) {
+  if (self.debug) {
     SBLog(@"Sending params for configuration: %@", lParams);
   }
   
@@ -268,7 +269,7 @@ static Switchboard *sharedInstance = nil;
   NSMutableString *lQueryString = [NSMutableString stringWithString:@"?"];
   
   // iterate through the keys in the parameters
-  for (NSString *lKey in [lParams allKeys]) {
+  for (NSString *lKey in[lParams allKeys]) {
     // append the format to the query string
     NSString *lParam = [[lParams objectForKey:lKey] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     
@@ -282,7 +283,7 @@ static Switchboard *sharedInstance = nil;
   lUrlString = [lUrlString stringByAppendingString:lQueryString];
   
   // print debug log
-  if (_debug) {
+  if (self.debug) {
     SBLog(@"Calling url: %@", lUrlString);
   }
   
@@ -292,15 +293,15 @@ static Switchboard *sharedInstance = nil;
   
   // send the request asynchronously
   [NSURLConnection sendAsynchronousRequest:lUrlRequest
-                                     queue:_requestQueue                                                                                                                                                                                                                                                                                                                                                                                                                           // use our request queue. this throttles so we minimize footprint
-                         completionHandler:^(NSURLResponse *pResponse, NSData *pData, NSError *pError) {
+                                     queue:requestQueue                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               // use our request queue. this throttles so we minimize footprint
+                         completionHandler: ^(NSURLResponse *pResponse, NSData *pData, NSError *pError) {
                            // got data
                            if ([pData length] > 0 && pError == nil) {
                              // convert the NSData value into a readable string
                              NSString *lResponseString = [[NSString alloc] initWithData:pData encoding:NSUTF8StringEncoding];
                              
                              // print debug log
-                             if (_debug) {
+                             if (self.debug) {
                                SBLog(@"Response: %@", lResponseString);
                              }
                              
@@ -313,74 +314,75 @@ static Switchboard *sharedInstance = nil;
                                [SBPreferences setConfigurationJSON:lJson];
                                
                                // print debug
-                               if (_debug) {
+                               if (self.debug) {
                                  SBLog(@"Updated server config: %@", lJson);
                                }
                              }
                              // there was an error parsing the response
                              else {
-                               if (_debug) {
+                               if (self.debug) {
                                  SBLog(@"Error updating configuration: unable to parse response");
                                }
                              }
                            }
                            // error occurred
                            else {
-                             if (_debug) {
+                             if (self.debug) {
                                SBLog(@"Error updating configuration: %@", pError);
                              }
                            }
                          }];
 }
 
-+ (void) downloadConfigurationWithCustomUUID:(NSString *)uuid {
++ (void)downloadConfigurationWithCustomUUID:(NSString *)uuid {
   [[Switchboard sharedInstance] downloadConfiguration:uuid];
 }
 
-+ (void) downloadConfiguration {
++ (void)downloadConfiguration {
   [Switchboard downloadConfigurationWithCustomUUID:nil];
 }
 
 #pragma mark initialization
-- (void) beginWithServerURL:(NSString *)pServerURL
-          andServerURLStage:(NSString *)pServerURLStage
-                 andMainURL:(NSString *)pMainURL
-            andMainURLStage:(NSString *)pMainURLStage
-                   andDebug:(BOOL)pDebug {
+- (void)beginWithServerURL:(NSString *)pServerURL
+         andServerURLStage:(NSString *)pServerURLStage
+                andMainURL:(NSString *)pMainURL
+           andMainURLStage:(NSString *)pMainURLStage
+                  andDebug:(BOOL)pDebug {
   // set up our operation queue
-  _requestQueue = [[NSOperationQueue alloc] init];
+  self.requestQueue = [[NSOperationQueue alloc] init];
   
   // limit to 1 request at a time. we don't want to use too much of the app's resources
-  [_requestQueue setMaxConcurrentOperationCount:1];
+  [requestQueue setMaxConcurrentOperationCount:1];
   
   // keep the debug variable locally
-  _debug = pDebug;
-  
-  // keep the urls around locally
-  _serverURL = [pServerURL retain];
-  _mainURL = [pMainURL retain];
+  self.debug = pDebug;
   
   // if we were passed a staging server and we're in debug mode
   if (pServerURLStage != nil && pDebug) {
     // use the stage as the default server
-    _serverURL = [pServerURLStage retain];
+    self.serverURL = pServerURLStage;
+  } else {
+    self.serverURL = pServerURL;
   }
   
   // if we were passed a staging server and we're in debug mode
   if (pMainURLStage != nil && pDebug) {
     // use the stage as the default server
-    _mainURL = [pMainURLStage retain];
+    self.mainURL = pMainURLStage;
+  } else {
+    // keep the urls around locally
+    self.mainURL = pMainURL;
   }
   
   // store the strings in the persistent preference file
   [self storeDefaultURLsInPreferences];
 }
 
-+ (void) beginWithServerURL:(NSString *)pServerURL
-          andServerURLStage:(NSString *)pServerURLStage
-                 andMainURL:(NSString *)pMainURL
-            andMainURLStage:(NSString *)pMainURLStage
-                   andDebug:(BOOL)pDebug {
++ (void)beginWithServerURL:(NSString *)pServerURL
+         andServerURLStage:(NSString *)pServerURLStage
+                andMainURL:(NSString *)pMainURL
+           andMainURLStage:(NSString *)pMainURLStage
+                  andDebug:(BOOL)pDebug {
   // initialize the engine
   [[Switchboard sharedInstance] beginWithServerURL:pServerURL
                                  andServerURLStage:pServerURLStage
@@ -389,9 +391,9 @@ static Switchboard *sharedInstance = nil;
                                           andDebug:pDebug];
 }
 
-+ (void) beginWithServerURL:(NSString *)pServerURL
-                 andMainURL:(NSString *)pMainURL
-                   andDebug:(BOOL)pDebug {
++ (void)beginWithServerURL:(NSString *)pServerURL
+                andMainURL:(NSString *)pMainURL
+                  andDebug:(BOOL)pDebug {
   // initialize the engine
   [Switchboard beginWithServerURL:pServerURL
                 andServerURLStage:nil
@@ -402,19 +404,18 @@ static Switchboard *sharedInstance = nil;
 
 #pragma mark - singleton management
 
-
-
 // Get the singleton object.
 // As a static method this looks like [Switchboard sharedInstance]
-+ (Switchboard *) sharedInstance {
-  // if the singleton doesn't exist yet
-  if (sharedInstance == nil) {
-    // create it
-    sharedInstance = [[super allocWithZone:NULL] init];
-  }
++ (Switchboard *)sharedInstance {
+  static Switchboard    *sSingleton = nil;
+  static dispatch_once_t sOnceToken;
   
-  // return the singleton
-  return sharedInstance;
+  dispatch_once(&sOnceToken, ^{
+    // Create Wamigo shared instance
+    sSingleton = [[Switchboard alloc] init];
+  });
+  
+  return sSingleton;
 }
 
 @end
