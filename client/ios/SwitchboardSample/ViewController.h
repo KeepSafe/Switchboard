@@ -10,7 +10,7 @@
 
 @interface ViewController : UIViewController
 
-@property (nonatomic, retain) IBOutlet UILabel *messageTitle;
-@property (nonatomic, retain) IBOutlet UILabel *messageText;
+@property (retain, nonatomic) IBOutlet UILabel *messageTitle;
+@property (retain, nonatomic) IBOutlet UILabel *messageText;
 
 @end

@@ -80,7 +80,50 @@ And it works for varying any value too. Again, on Android:
 ```
 
 #### iOS
-Please look at the iOS sample implementation under [client/ios/SwitchboardSample](https://github.com/KeepSafe/Switchboard/tree/master/client/ios/SwitchboardSample)
+##### Install Switchboard with CocoaPods:
+
+1) Edit your Podfile and add: 
+```ruby
+  pod 'Switchboard', '0.0.3'
+```
+2) Execute the command:
+```bash
+  $ pod install 
+```
+  or
+```bash
+  $ pod update 
+```
+
+##### Use Switchboard in your project 
+1) Open your AppDelegate.m and initialize your Switchboard like this:
+```Objective-C
+  - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    // Change the urls by the urls of your server
+  	[Switchboard beginWithServerURL:@"http://switchboard.herokuapp.com/SwitchboardURLs.php"
+  	                     andMainURL:@"http://switchboard.herokuapp.com/SwitchboardDriver.php"
+  	                       andDebug:TRUE];
+  	return YES;
+  }
+```
+
+2) Apply a scenario on your UIViewController
+```Objective-C
+- (void)viewDidLoad {
+  [super viewDidLoad];
+  
+  [Switchboard whenReady:^{
+    [Switchboard experiment:@"homeScreenMessage" completionBlock:^(NSDictionary *pValues) {
+      self.messageText.text = [pValues objectForKey:@"message"];
+      self.messageTitle.text = [pValues objectForKey:@"messageTitle"];
+      
+      NSLog(@"Got values:");
+      NSLog(@"Message: %@", self.messageText.text);
+      NSLog(@"MessageTitle: %@", self.messageTitle.text);
+    }];
+  }];
+}
+```
 
 ### Server
 The server receives a UUID that the client generated as well as many other parameters like app version, OS version, device language, location.
