@@ -114,18 +114,9 @@ class SwitchboardManager {
       * Return the bucket number of the user. There a 100 possible buckes.
       */  
     function getUserBucket() {
-    
-    	$lastChars = substr($this->uuid, -5);
-    	
-    	$segmentId = $lastChars[0];
-    	
-    	for($i = 1; $i < strlen($lastChars); $i++){
-    		$segmentId = ($segmentId << 3) + ord($lastChars[$i]);
-    	}
-    	
-    	$segment = substr($segmentId, -2);
-    	
-    	return $segment;
+    	  $checksum = crc32($this->uuid);
+		  $bucket = $checksum % 100;    	
+    	  return $bucket;
     }
     
     function getArrayParam($array, $paramName){
