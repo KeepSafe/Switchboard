@@ -21,36 +21,27 @@
 #pragma mark -> Implementation
 @implementation ViewController
 
-#pragma mark -> Private methodes
-
-- (void)refreshMessage {
-	if ([Switchboard isInExperiment:@"homeScreenMessage"]) {
-		NSLog(@"isInExperiment homeScreen");
-    
-		if ([Switchboard hasExperimentValues:@"homeScreenMessage"]) {
-			NSLog(@"has values");
-      
-			NSDictionary *values = [Switchboard getExperimentValueFromJSON:@"homeScreenMessage"];
-      
-			self.messageText.text = [values objectForKey:@"message"];
-			self.messageTitle.text = [values objectForKey:@"messageTitle"];
-      
-			NSLog(@"Got values:");
-			NSLog(@"Message: %@", self.messageText.text);
-			NSLog(@"MessageTitle: %@", self.messageTitle.text);
-		}
-	}
-}
-
 #pragma mark -> UIViewController methodes
 
-- (void)viewDidAppear:(BOOL)animated {
-	[self refreshMessage];
-}
-
 - (void)viewDidLoad {
-	[super viewDidLoad];
-	// Do any additional setup after loading the view, typically from a nib.
+  [super viewDidLoad];
+  
+  if ([Switchboard isInExperiment:@"homeScreenMessage"]) {
+    NSLog(@"isInExperiment homeScreen");
+    
+    if ([Switchboard hasExperimentValues:@"homeScreenMessage"]) {
+      NSLog(@"has values");
+      
+      NSDictionary *lValues = [Switchboard getExperimentValueFromJSON:@"homeScreenMessage"];
+      
+      self.messageText.text = [lValues objectForKey:@"message"];
+      self.messageTitle.text = [lValues objectForKey:@"messageTitle"];
+      
+      NSLog(@"Got values:");
+      NSLog(@"Message: %@", self.messageText.text);
+      NSLog(@"MessageTitle: %@", self.messageTitle.text);
+    }
+  }
 }
 
 @end
