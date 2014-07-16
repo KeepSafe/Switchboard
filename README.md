@@ -82,11 +82,11 @@ And it works for varying any value too. Again, on Android:
 #### iOS
 ##### Install Switchboard with CocoaPods:
 
-1. Edit your Podfile and add: 
+1) Edit your Podfile and add: 
 ```ruby
   pod 'Switchboard', '0.0.2'
 ```
-2. Execute the command:
+2) Execute the command:
 ```bash
   $ pod install 
 ```
@@ -96,7 +96,7 @@ And it works for varying any value too. Again, on Android:
 ```
 
 ##### Use Switchboard in your project 
-1. Open your AppDelegate.m and initialize your Switchboard like this:
+1) Open your AppDelegate.m and initialize your Switchboard like this:
 ```Objective-C
   - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Change the urls by the urls of your server
@@ -111,7 +111,7 @@ And it works for varying any value too. Again, on Android:
   }
 ```
 
-2. Apply a scenario on your UIViewController
+2) Apply a scenario on your UIViewController
 ```Objective-C
 - (void)viewDidLoad {
   [super viewDidLoad];
