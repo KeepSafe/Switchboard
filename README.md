@@ -84,7 +84,7 @@ And it works for varying any value too. Again, on Android:
 
 1) Edit your Podfile and add: 
 ```ruby
-  pod 'Switchboard', '0.0.2'
+  pod 'Switchboard', '0.0.3'
 ```
 2) Execute the command:
 ```bash
