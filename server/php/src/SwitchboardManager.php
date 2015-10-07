@@ -39,6 +39,7 @@ class SwitchboardManager {
     var $uuid;
     var $country;
     var $version;
+    var $build;
     var $appId;
     
     function __construct($params) {
@@ -47,6 +48,7 @@ class SwitchboardManager {
     	$this->manufacturer = $this->getArrayParam($params, 'manufacturer');
     	$this->lang = $this->getArrayParam($params, 'lang');
     	$this->version = $this->getArrayParam($params, 'version');
+      $this->version = $this->getArrayParam($params, 'build');
     	$this->country = $this->getArrayParam($params, 'country');
     	$this->appId = $this->getArrayParam($params, 'appId');
     }    
@@ -114,7 +116,7 @@ class SwitchboardManager {
       * Return the bucket number of the user. There a 100 possible buckes.
       */  
     function getUserBucket() {
-    	  $checksum = crc32($this->uuid);
+    	  $checksum = abs(crc32($this->uuid));
 		  $bucket = $checksum % 100;    	
     	  return $bucket;
     }
