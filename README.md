@@ -40,7 +40,7 @@ The Switchboard client lib is available for android and iOS. The following examp
 documentation under the [Wiki](https://github.com/KeepSafe/Switchboard/wiki)
 
 #### Android
-Link the Switchboard project to your andorid project as a library project. You only need to initialize the Switchboard core at the application start once. 
+Link the Switchboard project to your android project as a library project. You only need to initialize the Switchboard core at the application start once. 
 Then, you can add switches to your app and have the Switchboard give you the current state.
 
 You can customize the DynamicConfigManager to send all sorts of information to the Switchboard server for control decisions, e.g. location, OS version, device, language.
