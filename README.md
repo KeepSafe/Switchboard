@@ -135,7 +135,7 @@ You can do more complex things if you want:
 ```
 
 ## More information on how to use it
-* [KeepSafe Engineering Blog](http://keepsafe-engineering.tumblr.com/post/28437940369/easy-mobile-ab-testing)
+* [Keepsafe Engineering Blog](http://keepsafe-engineering.tumblr.com/post/28437940369/easy-mobile-ab-testing)
 * [Quora](http://www.quora.com/A-B-Testing/How-do-companies-practically-A-B-Test-new-versions-of-native-mobile-apps-that-are-already-in-production)
 
 ## Problems & Bugs
@@ -145,7 +145,7 @@ Please us the [Github Issue tracker](https://github.com/KeepSafe/Switchboard/iss
 Switchboard is licensed under the [Apache Software License, 2.0 ("Apache 2.0")](http://www.apache.org/licenses/LICENSE-2.0)
 
 ## Authors
-Switchboard is brought to you by [Philipp Berner](https://github.com/philippb) and [Zouhair Belkoura](https://github.com/zouhairb), founders of KeepSafe.
+Switchboard is brought to you by [Philipp Berner](https://github.com/philippb) and [Zouhair Belkoura](https://github.com/zouhairb), founders of Keepsafe.
 We'd love to have you contribute.
 
 ## Contributors
@@ -154,4 +154,4 @@ Special thanks goes to our contributors
 - [Chris Beauchamp](https://github.com/cjbeauchamp)
 
 ## Used in production by
-* KeepSafe (www.getkeepsafe.com)
+* Keepsafe (www.getkeepsafe.com)
