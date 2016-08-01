@@ -15,10 +15,10 @@
 */
 package com.keepsafe.switchboard.example;
 
+import android.app.Activity;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 
-public class NextActivityTest extends AppCompatActivity {
+public class NextActivityTest extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
