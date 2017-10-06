@@ -36,8 +36,10 @@ Consistency in user segmentation is one of the most important things in A/B test
 
 ## How to use it
 ### Client
-The Switchboard client lib is available for android and iOS. The following examples give you a brief overview on how to get started. You can find a more in depth 
-documentation under the [Wiki](https://github.com/KeepSafe/Switchboard/wiki)
+The Switchboard client lib is available for Android and iOS. The following examples give you a brief overview on how to get started. 
+
+You can find a more in depth 
+documentation for Android under the [wiki](https://github.com/KeepSafe/Switchboard/wiki/Getting-Started-Client-for-Android) and for iOS within its separate [repository](https://github.com/KeepSafe/Switchboard-iOS).
 
 #### Android
 Link the Switchboard project to your android project as a library project. You only need to initialize the Switchboard core at the application start once. 
@@ -80,7 +82,7 @@ And it works for varying any value too. Again, on Android:
 ```
 
 #### iOS
-Please look at the iOS sample implementation under [client/ios/SwitchboardSample](https://github.com/KeepSafe/Switchboard/tree/master/client/ios/SwitchboardSample)
+Please look at the iOS SDK at [Switchboard-iOS](https://github.com/KeepSafe/Switchboard-iOS)
 
 ### Server
 The server receives a UUID that the client generated as well as many other parameters like app version, OS version, device language, location.
