@@ -57,7 +57,7 @@ Debug interface and extensive documentation here: [Switchboard-iOS](https://gith
 ## More information about it:
 
 * [Keepsafe Engineering Blog](https://medium.com/keepsafe-engineering/a-b-testing-for-mobile-apps-made-easy-348b68e68362#.j7f2x848n)
-* [Quora](http://www.quora.com/A-B-Testing/How-do-companies-practically-A-B-Test-new-versions-of-native-mobile-apps-that-are-already-in-production)
+* [Quora](http://qr.ae/TUTJcZ)
 
 ## Problems & Bugs
 
