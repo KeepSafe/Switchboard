@@ -1,3 +1,0 @@
-check for package name server side
-
-Server side error handling with HTTP status codes
