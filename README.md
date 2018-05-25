@@ -42,7 +42,7 @@ Switchboard does consistent user segmentation based on a unique device id.
 
 ## How to use it
 
-#### iOS
+### iOS
 
 Debug interface and extensive documentation here: [Switchboard-iOS](https://github.com/KeepSafe/Switchboard-iOS)
 
