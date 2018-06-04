@@ -52,7 +52,7 @@ Debug interface and extensive documentation here: [Switchboard-iOS](https://gith
 
 ### Android
 
-[Coming soon...]
+We're working on an updated Android client for Switchboard; in the meantime, here is the original client: [Switchboard-Android](https://github.com/KeepSafe/Switchboard-Android)
 
 ## More information about it:
 
